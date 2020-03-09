@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "memberState" : {
+            "home": {
+                "title": "Member States",
+                "createLabel": "Crear nuevo Member State",
+                "createOrEditLabel": "Crear o editar Member State"
+            },
+            "created": "Un nuevo Member State ha sido creado con el identificador {{ param }}",
+            "updated": "Un Member State ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Member State ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Member State {{ id }}?"
+            },
+            "detail": {
+                "title": "Member State"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}
