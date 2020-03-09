@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "internationalStandar" : {
+            "home": {
+                "title": "International Standars",
+                "createLabel": "Crear nuevo International Standar",
+                "createOrEditLabel": "Crear o editar International Standar"
+            },
+            "created": "Un nuevo International Standar ha sido creado con el identificador {{ param }}",
+            "updated": "Un International Standar ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un International Standar ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar International Standar {{ id }}?"
+            },
+            "detail": {
+                "title": "International Standar"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}

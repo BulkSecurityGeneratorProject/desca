@@ -1,0 +1,30 @@
+
+<div *ngIf="internationalStandar">
+    <h2><span jhiTranslate="descaApp.internationalStandar.detail.title">International Standar</span> {{internationalStandar.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="descaApp.internationalStandar.name">Name</span></dt>
+        <dd>
+            <span>{{internationalStandar.name}}</span>
+        </dd>
+        <dt><span jhiTranslate="descaApp.internationalStandar.status">Status</span></dt>
+        <dd>
+            <span>{{internationalStandar.status}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'international-standar/'+ internationalStandar.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>
