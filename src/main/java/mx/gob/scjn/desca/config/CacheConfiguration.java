@@ -47,6 +47,7 @@ public class CacheConfiguration {
             cm.createCache(mx.gob.scjn.desca.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.MemberState.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.Desca.class.getName(), jcacheConfiguration);
+            cm.createCache(mx.gob.scjn.desca.domain.Applicant.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
