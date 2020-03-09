@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20200309051648",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "metodology",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

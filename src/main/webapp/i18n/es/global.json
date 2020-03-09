@@ -11,6 +11,7 @@
                 "desca": "Desca",
                 "applicant": "Applicant",
                 "vulnerableGroup": "Vulnerable Group",
+                "metodology": "Metodology",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

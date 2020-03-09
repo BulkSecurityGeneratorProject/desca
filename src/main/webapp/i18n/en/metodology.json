@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "metodology" : {
+            "home": {
+                "title": "Metodologies",
+                "createLabel": "Create a new Metodology",
+                "createOrEditLabel": "Create or edit a Metodology"
+            },
+            "created": "A new Metodology is created with identifier {{ param }}",
+            "updated": "A Metodology is updated with identifier {{ param }}",
+            "deleted": "A Metodology is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Metodology {{ id }}?"
+            },
+            "detail": {
+                "title": "Metodology"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}
