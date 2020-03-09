@@ -8,6 +8,7 @@
     <include file="config/liquibase/changelog/20200309044625_added_entity_MemberState.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200309045204_added_entity_Desca.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200309045708_added_entity_Applicant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200309050249_added_entity_VulnerableGroup.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20200309050249",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "vulnerable_group",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "vulnerableGroup" : {
+            "home": {
+                "title": "Vulnerable Groups",
+                "createLabel": "Crear nuevo Vulnerable Group",
+                "createOrEditLabel": "Crear o editar Vulnerable Group"
+            },
+            "created": "Un nuevo Vulnerable Group ha sido creado con el identificador {{ param }}",
+            "updated": "Un Vulnerable Group ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Vulnerable Group ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Vulnerable Group {{ id }}?"
+            },
+            "detail": {
+                "title": "Vulnerable Group"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}

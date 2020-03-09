@@ -3,6 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DescaMemberStateModule } from './member-state/member-state.module';
 import { DescaDescaModule } from './desca/desca.module';
 import { DescaApplicantModule } from './applicant/applicant.module';
+import { DescaVulnerableGroupModule } from './vulnerable-group/vulnerable-group.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -10,6 +11,7 @@ import { DescaApplicantModule } from './applicant/applicant.module';
         DescaMemberStateModule,
         DescaDescaModule,
         DescaApplicantModule,
+        DescaVulnerableGroupModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

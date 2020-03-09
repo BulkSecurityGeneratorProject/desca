@@ -10,6 +10,7 @@
                 "memberState": "Member State",
                 "desca": "Desca",
                 "applicant": "Applicant",
+                "vulnerableGroup": "Vulnerable Group",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
