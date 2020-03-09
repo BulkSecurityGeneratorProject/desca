@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20200309054922",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "jud_proc_type",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

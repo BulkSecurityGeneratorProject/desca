@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "descaWay" : {
+            "home": {
+                "title": "Desca Ways",
+                "createLabel": "Create a new Desca Way",
+                "createOrEditLabel": "Create or edit a Desca Way"
+            },
+            "created": "A new Desca Way is created with identifier {{ param }}",
+            "updated": "A Desca Way is updated with identifier {{ param }}",
+            "deleted": "A Desca Way is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Desca Way {{ id }}?"
+            },
+            "detail": {
+                "title": "Desca Way"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}

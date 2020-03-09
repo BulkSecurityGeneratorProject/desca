@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "desca" : {
+            "home": {
+                "title": "Descas",
+                "createLabel": "Create a new Desca",
+                "createOrEditLabel": "Create or edit a Desca"
+            },
+            "created": "A new Desca is created with identifier {{ param }}",
+            "updated": "A Desca is updated with identifier {{ param }}",
+            "deleted": "A Desca is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Desca {{ id }}?"
+            },
+            "detail": {
+                "title": "Desca"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}

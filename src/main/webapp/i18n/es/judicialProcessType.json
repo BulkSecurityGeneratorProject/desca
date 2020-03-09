@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "judicialProcessType" : {
+            "home": {
+                "title": "Judicial Process Types",
+                "createLabel": "Crear nuevo Judicial Process Type",
+                "createOrEditLabel": "Crear o editar Judicial Process Type"
+            },
+            "created": "Un nuevo Judicial Process Type ha sido creado con el identificador {{ param }}",
+            "updated": "Un Judicial Process Type ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Judicial Process Type ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Judicial Process Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Judicial Process Type"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}

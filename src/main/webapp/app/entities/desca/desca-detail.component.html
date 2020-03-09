@@ -1,0 +1,30 @@
+
+<div *ngIf="desca">
+    <h2><span jhiTranslate="descaApp.desca.detail.title">Desca</span> {{desca.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="descaApp.desca.name">Name</span></dt>
+        <dd>
+            <span>{{desca.name}}</span>
+        </dd>
+        <dt><span jhiTranslate="descaApp.desca.status">Status</span></dt>
+        <dd>
+            <span>{{desca.status}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'desca/'+ desca.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "internationalStandard" : {
+            "home": {
+                "title": "International Standards",
+                "createLabel": "Create a new International Standard",
+                "createOrEditLabel": "Create or edit a International Standard"
+            },
+            "created": "A new International Standard is created with identifier {{ param }}",
+            "updated": "A International Standard is updated with identifier {{ param }}",
+            "deleted": "A International Standard is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete International Standard {{ id }}?"
+            },
+            "detail": {
+                "title": "International Standard"
+            },
+            "name": "Name",
+            "status": "Status"
+        }
+    }
+}
