@@ -9,6 +9,8 @@ import { DescaTestModule } from '../../../test.module';
 import { MainDatabaseDialogComponent } from '../../../../../../main/webapp/app/entities/main-database/main-database-dialog.component';
 import { MainDatabaseService } from '../../../../../../main/webapp/app/entities/main-database/main-database.service';
 import { MainDatabase } from '../../../../../../main/webapp/app/entities/main-database/main-database.model';
+import { MemberStateService } from '../../../../../../main/webapp/app/entities/member-state';
+import { JudicialProcessTypeService } from '../../../../../../main/webapp/app/entities/judicial-process-type';
 
 describe('Component Tests', () => {
 
@@ -24,6 +26,8 @@ describe('Component Tests', () => {
                 imports: [DescaTestModule],
                 declarations: [MainDatabaseDialogComponent],
                 providers: [
+                    MemberStateService,
+                    JudicialProcessTypeService,
                     MainDatabaseService
                 ]
             })

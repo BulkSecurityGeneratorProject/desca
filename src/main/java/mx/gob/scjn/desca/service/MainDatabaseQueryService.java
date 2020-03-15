@@ -85,6 +85,15 @@ public class MainDatabaseQueryService extends QueryService<MainDatabase> {
             if (criteria.getNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNumber(), MainDatabase_.number));
             }
+            if (criteria.getIntitution() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getIntitution(), MainDatabase_.intitution));
+            }
+            if (criteria.getMemberStateId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getMemberStateId(), MainDatabase_.memberState, MemberState_.id));
+            }
+            if (criteria.getJudicialProcessTypeId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getJudicialProcessTypeId(), MainDatabase_.judicialProcessType, JudicialProcessType_.id));
+            }
         }
         return specification;
     }

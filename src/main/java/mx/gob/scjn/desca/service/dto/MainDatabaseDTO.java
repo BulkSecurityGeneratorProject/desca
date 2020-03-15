@@ -3,6 +3,8 @@ package mx.gob.scjn.desca.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -14,6 +16,12 @@ public class MainDatabaseDTO implements Serializable {
 
     @NotNull
     private String number;
+
+    private String intitution;
+
+    private Long memberStateId;
+
+    private Long judicialProcessTypeId;
 
     public Long getId() {
         return id;
@@ -29,6 +37,30 @@ public class MainDatabaseDTO implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getIntitution() {
+        return intitution;
+    }
+
+    public void setIntitution(String intitution) {
+        this.intitution = intitution;
+    }
+
+    public Long getMemberStateId() {
+        return memberStateId;
+    }
+
+    public void setMemberStateId(Long memberStateId) {
+        this.memberStateId = memberStateId;
+    }
+
+    public Long getJudicialProcessTypeId() {
+        return judicialProcessTypeId;
+    }
+
+    public void setJudicialProcessTypeId(Long judicialProcessTypeId) {
+        this.judicialProcessTypeId = judicialProcessTypeId;
     }
 
     @Override
@@ -57,6 +89,7 @@ public class MainDatabaseDTO implements Serializable {
         return "MainDatabaseDTO{" +
             "id=" + getId() +
             ", number='" + getNumber() + "'" +
+            ", intitution='" + getIntitution() + "'" +
             "}";
     }
 }

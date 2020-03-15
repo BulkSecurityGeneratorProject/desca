@@ -4,11 +4,13 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { MainDatabase } from './main-database.model';
 import { MainDatabasePopupService } from './main-database-popup.service';
 import { MainDatabaseService } from './main-database.service';
+import { MemberState, MemberStateService } from '../member-state';
+import { JudicialProcessType, JudicialProcessTypeService } from '../judicial-process-type';
 
 @Component({
     selector: 'jhi-main-database-dialog',
@@ -19,15 +21,26 @@ export class MainDatabaseDialogComponent implements OnInit {
     mainDatabase: MainDatabase;
     isSaving: boolean;
 
+    memberstates: MemberState[];
+
+    judicialprocesstypes: JudicialProcessType[];
+
     constructor(
         public activeModal: NgbActiveModal,
+        private jhiAlertService: JhiAlertService,
         private mainDatabaseService: MainDatabaseService,
+        private memberStateService: MemberStateService,
+        private judicialProcessTypeService: JudicialProcessTypeService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.memberStateService.query()
+            .subscribe((res: HttpResponse<MemberState[]>) => { this.memberstates = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.judicialProcessTypeService.query()
+            .subscribe((res: HttpResponse<JudicialProcessType[]>) => { this.judicialprocesstypes = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -58,6 +71,18 @@ export class MainDatabaseDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackMemberStateById(index: number, item: MemberState) {
+        return item.id;
+    }
+
+    trackJudicialProcessTypeById(index: number, item: JudicialProcessType) {
+        return item.id;
     }
 }
 

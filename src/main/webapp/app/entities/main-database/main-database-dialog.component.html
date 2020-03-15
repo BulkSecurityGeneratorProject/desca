@@ -23,7 +23,26 @@
                 </small>
             </div>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="descaApp.mainDatabase.intitution" for="field_intitution">Intitution</label>
+            <input type="text" class="form-control" name="intitution" id="field_intitution"
+                [(ngModel)]="mainDatabase.intitution" />
+        </div>
 
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="descaApp.mainDatabase.memberState" for="field_memberState">Member State</label>
+            <select class="form-control" id="field_memberState" name="memberState" [(ngModel)]="mainDatabase.memberStateId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="memberStateOption.id" *ngFor="let memberStateOption of memberstates; trackBy: trackMemberStateById">{{memberStateOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="descaApp.mainDatabase.judicialProcessType" for="field_judicialProcessType">Judicial Process Type</label>
+            <select class="form-control" id="field_judicialProcessType" name="judicialProcessType" [(ngModel)]="mainDatabase.judicialProcessTypeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="judicialProcessTypeOption.id" *ngFor="let judicialProcessTypeOption of judicialprocesstypes; trackBy: trackJudicialProcessTypeById">{{judicialProcessTypeOption.id}}</option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

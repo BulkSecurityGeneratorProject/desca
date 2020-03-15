@@ -8,6 +8,22 @@
         <dd>
             <span>{{mainDatabase.number}}</span>
         </dd>
+        <dt><span jhiTranslate="descaApp.mainDatabase.intitution">Intitution</span></dt>
+        <dd>
+            <span>{{mainDatabase.intitution}}</span>
+        </dd>
+        <dt><span jhiTranslate="descaApp.mainDatabase.memberState">Member State</span></dt>
+        <dd>
+            <div *ngIf="mainDatabase.memberStateId">
+                <a [routerLink]="['/member-state', mainDatabase.memberStateId]">{{mainDatabase.memberStateId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="descaApp.mainDatabase.judicialProcessType">Judicial Process Type</span></dt>
+        <dd>
+            <div *ngIf="mainDatabase.judicialProcessTypeId">
+                <a [routerLink]="['/judicial-process-type', mainDatabase.judicialProcessTypeId]">{{mainDatabase.judicialProcessTypeId}}</a>
+            </div>
+        </dd>
     </dl>
 
     <button type="submit"

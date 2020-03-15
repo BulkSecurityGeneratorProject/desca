@@ -31,6 +31,9 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="number"><span jhiTranslate="descaApp.mainDatabase.number">Number</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="intitution"><span jhiTranslate="descaApp.mainDatabase.intitution">Intitution</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="memberStateId"><span jhiTranslate="descaApp.mainDatabase.memberState">Member State</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="judicialProcessTypeId"><span jhiTranslate="descaApp.mainDatabase.judicialProcessType">Judicial Process Type</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -38,6 +41,17 @@
             <tr *ngFor="let mainDatabase of mainDatabases ;trackBy: trackId">
                 <td><a [routerLink]="['../main-database', mainDatabase.id ]">{{mainDatabase.id}}</a></td>
                 <td>{{mainDatabase.number}}</td>
+                <td>{{mainDatabase.intitution}}</td>
+                <td>
+                    <div *ngIf="mainDatabase.memberStateId">
+                        <a [routerLink]="['../member-state', mainDatabase.memberStateId  ]" >{{mainDatabase.memberStateId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="mainDatabase.judicialProcessTypeId">
+                        <a [routerLink]="['../judicial-process-type', mainDatabase.judicialProcessTypeId  ]" >{{mainDatabase.judicialProcessTypeId}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

@@ -17,7 +17,10 @@
             "detail": {
                 "title": "Main Database"
             },
-            "number": "Number"
+            "number": "Number",
+            "intitution": "Intitution",
+            "memberState": "Member State",
+            "judicialProcessType": "Judicial Process Type"
         }
     }
 }

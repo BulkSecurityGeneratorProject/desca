@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity MainDatabase.
+    -->
+    <changeSet id="20200315213207-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="member_state_id"
+                                 baseTableName="main_database"
+                                 constraintName="fk_main_database_member_state_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="member_state"/>
+
+        <addForeignKeyConstraint baseColumnNames="judicial_process_type_id"
+                                 baseTableName="main_database"
+                                 constraintName="fk_main_database_judicial_process_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jud_proc_type"/>
+
+    </changeSet>
+</databaseChangeLog>

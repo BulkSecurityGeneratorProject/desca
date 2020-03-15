@@ -29,6 +29,15 @@ public class MainDatabase implements Serializable {
     @Column(name = "jhi_number", nullable = false)
     private String number;
 
+    @Column(name = "intitution")
+    private String intitution;
+
+    @ManyToOne
+    private MemberState memberState;
+
+    @ManyToOne
+    private JudicialProcessType judicialProcessType;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -49,6 +58,45 @@ public class MainDatabase implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getIntitution() {
+        return intitution;
+    }
+
+    public MainDatabase intitution(String intitution) {
+        this.intitution = intitution;
+        return this;
+    }
+
+    public void setIntitution(String intitution) {
+        this.intitution = intitution;
+    }
+
+    public MemberState getMemberState() {
+        return memberState;
+    }
+
+    public MainDatabase memberState(MemberState memberState) {
+        this.memberState = memberState;
+        return this;
+    }
+
+    public void setMemberState(MemberState memberState) {
+        this.memberState = memberState;
+    }
+
+    public JudicialProcessType getJudicialProcessType() {
+        return judicialProcessType;
+    }
+
+    public MainDatabase judicialProcessType(JudicialProcessType judicialProcessType) {
+        this.judicialProcessType = judicialProcessType;
+        return this;
+    }
+
+    public void setJudicialProcessType(JudicialProcessType judicialProcessType) {
+        this.judicialProcessType = judicialProcessType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -77,6 +125,7 @@ public class MainDatabase implements Serializable {
         return "MainDatabase{" +
             "id=" + getId() +
             ", number='" + getNumber() + "'" +
+            ", intitution='" + getIntitution() + "'" +
             "}";
     }
 }

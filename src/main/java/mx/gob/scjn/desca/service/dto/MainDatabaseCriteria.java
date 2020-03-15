@@ -30,6 +30,12 @@ public class MainDatabaseCriteria implements Serializable {
 
     private StringFilter number;
 
+    private StringFilter intitution;
+
+    private LongFilter memberStateId;
+
+    private LongFilter judicialProcessTypeId;
+
     public MainDatabaseCriteria() {
     }
 
@@ -49,11 +55,38 @@ public class MainDatabaseCriteria implements Serializable {
         this.number = number;
     }
 
+    public StringFilter getIntitution() {
+        return intitution;
+    }
+
+    public void setIntitution(StringFilter intitution) {
+        this.intitution = intitution;
+    }
+
+    public LongFilter getMemberStateId() {
+        return memberStateId;
+    }
+
+    public void setMemberStateId(LongFilter memberStateId) {
+        this.memberStateId = memberStateId;
+    }
+
+    public LongFilter getJudicialProcessTypeId() {
+        return judicialProcessTypeId;
+    }
+
+    public void setJudicialProcessTypeId(LongFilter judicialProcessTypeId) {
+        this.judicialProcessTypeId = judicialProcessTypeId;
+    }
+
     @Override
     public String toString() {
         return "MainDatabaseCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (number != null ? "number=" + number + ", " : "") +
+                (intitution != null ? "intitution=" + intitution + ", " : "") +
+                (memberStateId != null ? "memberStateId=" + memberStateId + ", " : "") +
+                (judicialProcessTypeId != null ? "judicialProcessTypeId=" + judicialProcessTypeId + ", " : "") +
             "}";
     }
 

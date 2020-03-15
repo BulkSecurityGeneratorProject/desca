@@ -3,6 +3,8 @@ package mx.gob.scjn.desca.web.rest;
 import mx.gob.scjn.desca.DescaApp;
 
 import mx.gob.scjn.desca.domain.MainDatabase;
+import mx.gob.scjn.desca.domain.MemberState;
+import mx.gob.scjn.desca.domain.JudicialProcessType;
 import mx.gob.scjn.desca.repository.MainDatabaseRepository;
 import mx.gob.scjn.desca.service.MainDatabaseService;
 import mx.gob.scjn.desca.repository.search.MainDatabaseSearchRepository;
@@ -46,6 +48,9 @@ public class MainDatabaseResourceIntTest {
 
     private static final String DEFAULT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_INTITUTION = "AAAAAAAAAA";
+    private static final String UPDATED_INTITUTION = "BBBBBBBBBB";
 
     @Autowired
     private MainDatabaseRepository mainDatabaseRepository;
@@ -97,7 +102,8 @@ public class MainDatabaseResourceIntTest {
      */
     public static MainDatabase createEntity(EntityManager em) {
         MainDatabase mainDatabase = new MainDatabase()
-            .number(DEFAULT_NUMBER);
+            .number(DEFAULT_NUMBER)
+            .intitution(DEFAULT_INTITUTION);
         return mainDatabase;
     }
 
@@ -124,6 +130,7 @@ public class MainDatabaseResourceIntTest {
         assertThat(mainDatabaseList).hasSize(databaseSizeBeforeCreate + 1);
         MainDatabase testMainDatabase = mainDatabaseList.get(mainDatabaseList.size() - 1);
         assertThat(testMainDatabase.getNumber()).isEqualTo(DEFAULT_NUMBER);
+        assertThat(testMainDatabase.getIntitution()).isEqualTo(DEFAULT_INTITUTION);
 
         // Validate the MainDatabase in Elasticsearch
         MainDatabase mainDatabaseEs = mainDatabaseSearchRepository.findOne(testMainDatabase.getId());
@@ -180,7 +187,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
-            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())));
+            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
     }
 
     @Test
@@ -194,7 +202,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(mainDatabase.getId().intValue()))
-            .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER.toString()));
+            .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER.toString()))
+            .andExpect(jsonPath("$.intitution").value(DEFAULT_INTITUTION.toString()));
     }
 
     @Test
@@ -235,6 +244,83 @@ public class MainDatabaseResourceIntTest {
         // Get all the mainDatabaseList where number is null
         defaultMainDatabaseShouldNotBeFound("number.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByIntitutionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where intitution equals to DEFAULT_INTITUTION
+        defaultMainDatabaseShouldBeFound("intitution.equals=" + DEFAULT_INTITUTION);
+
+        // Get all the mainDatabaseList where intitution equals to UPDATED_INTITUTION
+        defaultMainDatabaseShouldNotBeFound("intitution.equals=" + UPDATED_INTITUTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByIntitutionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where intitution in DEFAULT_INTITUTION or UPDATED_INTITUTION
+        defaultMainDatabaseShouldBeFound("intitution.in=" + DEFAULT_INTITUTION + "," + UPDATED_INTITUTION);
+
+        // Get all the mainDatabaseList where intitution equals to UPDATED_INTITUTION
+        defaultMainDatabaseShouldNotBeFound("intitution.in=" + UPDATED_INTITUTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByIntitutionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where intitution is not null
+        defaultMainDatabaseShouldBeFound("intitution.specified=true");
+
+        // Get all the mainDatabaseList where intitution is null
+        defaultMainDatabaseShouldNotBeFound("intitution.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByMemberStateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        MemberState memberState = MemberStateResourceIntTest.createEntity(em);
+        em.persist(memberState);
+        em.flush();
+        mainDatabase.setMemberState(memberState);
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+        Long memberStateId = memberState.getId();
+
+        // Get all the mainDatabaseList where memberState equals to memberStateId
+        defaultMainDatabaseShouldBeFound("memberStateId.equals=" + memberStateId);
+
+        // Get all the mainDatabaseList where memberState equals to memberStateId + 1
+        defaultMainDatabaseShouldNotBeFound("memberStateId.equals=" + (memberStateId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByJudicialProcessTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        JudicialProcessType judicialProcessType = JudicialProcessTypeResourceIntTest.createEntity(em);
+        em.persist(judicialProcessType);
+        em.flush();
+        mainDatabase.setJudicialProcessType(judicialProcessType);
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+        Long judicialProcessTypeId = judicialProcessType.getId();
+
+        // Get all the mainDatabaseList where judicialProcessType equals to judicialProcessTypeId
+        defaultMainDatabaseShouldBeFound("judicialProcessTypeId.equals=" + judicialProcessTypeId);
+
+        // Get all the mainDatabaseList where judicialProcessType equals to judicialProcessTypeId + 1
+        defaultMainDatabaseShouldNotBeFound("judicialProcessTypeId.equals=" + (judicialProcessTypeId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -243,7 +329,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
-            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())));
+            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
     }
 
     /**
@@ -279,7 +366,8 @@ public class MainDatabaseResourceIntTest {
         // Disconnect from session so that the updates on updatedMainDatabase are not directly saved in db
         em.detach(updatedMainDatabase);
         updatedMainDatabase
-            .number(UPDATED_NUMBER);
+            .number(UPDATED_NUMBER)
+            .intitution(UPDATED_INTITUTION);
         MainDatabaseDTO mainDatabaseDTO = mainDatabaseMapper.toDto(updatedMainDatabase);
 
         restMainDatabaseMockMvc.perform(put("/api/main-databases")
@@ -292,6 +380,7 @@ public class MainDatabaseResourceIntTest {
         assertThat(mainDatabaseList).hasSize(databaseSizeBeforeUpdate);
         MainDatabase testMainDatabase = mainDatabaseList.get(mainDatabaseList.size() - 1);
         assertThat(testMainDatabase.getNumber()).isEqualTo(UPDATED_NUMBER);
+        assertThat(testMainDatabase.getIntitution()).isEqualTo(UPDATED_INTITUTION);
 
         // Validate the MainDatabase in Elasticsearch
         MainDatabase mainDatabaseEs = mainDatabaseSearchRepository.findOne(testMainDatabase.getId());
@@ -351,7 +440,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
-            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())));
+            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
     }
 
     @Test

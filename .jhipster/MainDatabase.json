@@ -1,6 +1,19 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "memberState",
+            "otherEntityName": "memberState",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "judicialProcessType",
+            "otherEntityName": "judicialProcessType",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
     "fields": [
         {
             "fieldName": "number",
@@ -8,6 +21,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "intitution",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20200315213207",
