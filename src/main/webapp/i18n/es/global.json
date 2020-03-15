@@ -16,6 +16,7 @@
                 "methodology": "Methodology",
                 "vulnerableGroup": "Vulnerable Group",
                 "repairType": "Repair Type",
+                "repair": "Repair",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

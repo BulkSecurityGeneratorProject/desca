@@ -9,6 +9,7 @@ import { DescaMemberStateModule } from './member-state/member-state.module';
 import { DescaMethodologyModule } from './methodology/methodology.module';
 import { DescaVulnerableGroupModule } from './vulnerable-group/vulnerable-group.module';
 import { DescaRepairTypeModule } from './repair-type/repair-type.module';
+import { DescaRepairModule } from './repair/repair.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -22,6 +23,7 @@ import { DescaRepairTypeModule } from './repair-type/repair-type.module';
         DescaMethodologyModule,
         DescaVulnerableGroupModule,
         DescaRepairTypeModule,
+        DescaRepairModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

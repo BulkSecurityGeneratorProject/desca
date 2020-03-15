@@ -1,0 +1,24 @@
+
+{
+    "descaApp": {
+        "repair" : {
+            "home": {
+                "title": "Repairs",
+                "createLabel": "Crear nuevo Repair",
+                "createOrEditLabel": "Crear o editar Repair",
+                "search": "Search for Repair"
+            },
+            "created": "Un nuevo Repair ha sido creado con el identificador {{ param }}",
+            "updated": "Un Repair ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Repair ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Repair {{ id }}?"
+            },
+            "detail": {
+                "title": "Repair"
+            },
+            "name": "Name",
+            "enabled": "Enabled"
+        }
+    }
+}
