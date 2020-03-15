@@ -1,0 +1,23 @@
+
+{
+    "descaApp": {
+        "mainDatabase" : {
+            "home": {
+                "title": "Main Databases",
+                "createLabel": "Crear nuevo Main Database",
+                "createOrEditLabel": "Crear o editar Main Database",
+                "search": "Search for Main Database"
+            },
+            "created": "Un nuevo Main Database ha sido creado con el identificador {{ param }}",
+            "updated": "Un Main Database ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Main Database ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Main Database {{ id }}?"
+            },
+            "detail": {
+                "title": "Main Database"
+            },
+            "number": "Number"
+        }
+    }
+}

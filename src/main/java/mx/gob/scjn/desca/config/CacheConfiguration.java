@@ -55,6 +55,7 @@ public class CacheConfiguration {
             cm.createCache(mx.gob.scjn.desca.domain.VulnerableGroup.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.RepairType.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.Repair.class.getName(), jcacheConfiguration);
+            cm.createCache(mx.gob.scjn.desca.domain.MainDatabase.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

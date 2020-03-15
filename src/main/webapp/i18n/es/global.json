@@ -17,6 +17,7 @@
                 "vulnerableGroup": "Vulnerable Group",
                 "repairType": "Repair Type",
                 "repair": "Repair",
+                "mainDatabase": "Main Database",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
