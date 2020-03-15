@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "enabled",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20200315201346",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "repair_type",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

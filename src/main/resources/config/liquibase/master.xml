@@ -13,6 +13,7 @@
     <include file="config/liquibase/changelog/20200309054922_added_entity_MemberState.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200309054922_added_entity_Methodology.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200309054922_added_entity_VulnerableGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200315201346_added_entity_RepairType.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

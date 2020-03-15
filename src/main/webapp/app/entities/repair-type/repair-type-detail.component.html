@@ -1,0 +1,30 @@
+
+<div *ngIf="repairType">
+    <h2><span jhiTranslate="descaApp.repairType.detail.title">Repair Type</span> {{repairType.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="descaApp.repairType.name">Name</span></dt>
+        <dd>
+            <span>{{repairType.name}}</span>
+        </dd>
+        <dt><span jhiTranslate="descaApp.repairType.enabled">Enabled</span></dt>
+        <dd>
+            <span>{{repairType.enabled}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'repair-type/'+ repairType.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

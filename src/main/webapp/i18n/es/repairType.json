@@ -1,0 +1,24 @@
+
+{
+    "descaApp": {
+        "repairType" : {
+            "home": {
+                "title": "Repair Types",
+                "createLabel": "Crear nuevo Repair Type",
+                "createOrEditLabel": "Crear o editar Repair Type",
+                "search": "Search for Repair Type"
+            },
+            "created": "Un nuevo Repair Type ha sido creado con el identificador {{ param }}",
+            "updated": "Un Repair Type ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Repair Type ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Repair Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Repair Type"
+            },
+            "name": "Name",
+            "enabled": "Enabled"
+        }
+    }
+}
