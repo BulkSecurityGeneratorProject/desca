@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "enabled",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20200315233901",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "desca_way_byc",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

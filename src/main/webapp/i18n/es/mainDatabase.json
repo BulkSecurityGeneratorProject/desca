@@ -19,8 +19,10 @@
             },
             "number": "Number",
             "intitution": "Intitution",
+            "resolutionDate": "Resolution Date",
             "memberState": "Member State",
-            "judicialProcessType": "Judicial Process Type"
+            "judicialProcessType": "Judicial Process Type",
+            "descaWayByC": "Desca Way By C"
         }
     }
 }

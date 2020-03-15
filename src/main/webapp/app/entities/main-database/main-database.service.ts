@@ -3,6 +3,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 
+import { JhiDateUtils } from 'ng-jhipster';
+
 import { MainDatabase } from './main-database.model';
 import { createRequestOption } from '../../shared';
 
@@ -14,7 +16,7 @@ export class MainDatabaseService {
     private resourceUrl =  SERVER_API_URL + 'api/main-databases';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/main-databases';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
 
     create(mainDatabase: MainDatabase): Observable<EntityResponseType> {
         const copy = this.convert(mainDatabase);
@@ -68,6 +70,8 @@ export class MainDatabaseService {
      */
     private convertItemFromServer(mainDatabase: MainDatabase): MainDatabase {
         const copy: MainDatabase = Object.assign({}, mainDatabase);
+        copy.resolutionDate = this.dateUtils
+            .convertLocalDateFromServer(mainDatabase.resolutionDate);
         return copy;
     }
 
@@ -76,6 +80,8 @@ export class MainDatabaseService {
      */
     private convert(mainDatabase: MainDatabase): MainDatabase {
         const copy: MainDatabase = Object.assign({}, mainDatabase);
+        copy.resolutionDate = this.dateUtils
+            .convertLocalDateToServer(mainDatabase.resolutionDate);
         return copy;
     }
 }

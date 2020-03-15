@@ -1,6 +1,7 @@
 package mx.gob.scjn.desca.service.dto;
 
 
+import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,9 +20,13 @@ public class MainDatabaseDTO implements Serializable {
 
     private String intitution;
 
+    private LocalDate resolutionDate;
+
     private Long memberStateId;
 
     private Long judicialProcessTypeId;
+
+    private Long descaWayByCId;
 
     public Long getId() {
         return id;
@@ -47,6 +52,14 @@ public class MainDatabaseDTO implements Serializable {
         this.intitution = intitution;
     }
 
+    public LocalDate getResolutionDate() {
+        return resolutionDate;
+    }
+
+    public void setResolutionDate(LocalDate resolutionDate) {
+        this.resolutionDate = resolutionDate;
+    }
+
     public Long getMemberStateId() {
         return memberStateId;
     }
@@ -61,6 +74,14 @@ public class MainDatabaseDTO implements Serializable {
 
     public void setJudicialProcessTypeId(Long judicialProcessTypeId) {
         this.judicialProcessTypeId = judicialProcessTypeId;
+    }
+
+    public Long getDescaWayByCId() {
+        return descaWayByCId;
+    }
+
+    public void setDescaWayByCId(Long descaWayByCId) {
+        this.descaWayByCId = descaWayByCId;
     }
 
     @Override
@@ -90,6 +111,7 @@ public class MainDatabaseDTO implements Serializable {
             "id=" + getId() +
             ", number='" + getNumber() + "'" +
             ", intitution='" + getIntitution() + "'" +
+            ", resolutionDate='" + getResolutionDate() + "'" +
             "}";
     }
 }

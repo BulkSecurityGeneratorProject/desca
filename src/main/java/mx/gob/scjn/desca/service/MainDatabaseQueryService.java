@@ -1,6 +1,6 @@
 package mx.gob.scjn.desca.service;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -88,11 +88,17 @@ public class MainDatabaseQueryService extends QueryService<MainDatabase> {
             if (criteria.getIntitution() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getIntitution(), MainDatabase_.intitution));
             }
+            if (criteria.getResolutionDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getResolutionDate(), MainDatabase_.resolutionDate));
+            }
             if (criteria.getMemberStateId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getMemberStateId(), MainDatabase_.memberState, MemberState_.id));
             }
             if (criteria.getJudicialProcessTypeId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getJudicialProcessTypeId(), MainDatabase_.judicialProcessType, JudicialProcessType_.id));
+            }
+            if (criteria.getDescaWayByCId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getDescaWayByCId(), MainDatabase_.descaWayByC, DescaWayByC_.id));
             }
         }
         return specification;

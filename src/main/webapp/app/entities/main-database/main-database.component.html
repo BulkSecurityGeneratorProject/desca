@@ -32,8 +32,10 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="number"><span jhiTranslate="descaApp.mainDatabase.number">Number</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="intitution"><span jhiTranslate="descaApp.mainDatabase.intitution">Intitution</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="resolutionDate"><span jhiTranslate="descaApp.mainDatabase.resolutionDate">Resolution Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="memberStateId"><span jhiTranslate="descaApp.mainDatabase.memberState">Member State</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="judicialProcessTypeId"><span jhiTranslate="descaApp.mainDatabase.judicialProcessType">Judicial Process Type</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="descaWayByCId"><span jhiTranslate="descaApp.mainDatabase.descaWayByC">Desca Way By C</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -42,6 +44,7 @@
                 <td><a [routerLink]="['../main-database', mainDatabase.id ]">{{mainDatabase.id}}</a></td>
                 <td>{{mainDatabase.number}}</td>
                 <td>{{mainDatabase.intitution}}</td>
+                <td>{{mainDatabase.resolutionDate | date:'mediumDate'}}</td>
                 <td>
                     <div *ngIf="mainDatabase.memberStateId">
                         <a [routerLink]="['../member-state', mainDatabase.memberStateId  ]" >{{mainDatabase.memberStateId}}</a>
@@ -50,6 +53,11 @@
                 <td>
                     <div *ngIf="mainDatabase.judicialProcessTypeId">
                         <a [routerLink]="['../judicial-process-type', mainDatabase.judicialProcessTypeId  ]" >{{mainDatabase.judicialProcessTypeId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="mainDatabase.descaWayByCId">
+                        <a [routerLink]="['../desca-way-by-c', mainDatabase.descaWayByCId  ]" >{{mainDatabase.descaWayByCId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

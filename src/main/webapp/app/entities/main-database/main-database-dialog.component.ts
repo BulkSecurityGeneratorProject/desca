@@ -11,6 +11,7 @@ import { MainDatabasePopupService } from './main-database-popup.service';
 import { MainDatabaseService } from './main-database.service';
 import { MemberState, MemberStateService } from '../member-state';
 import { JudicialProcessType, JudicialProcessTypeService } from '../judicial-process-type';
+import { DescaWayByC, DescaWayByCService } from '../desca-way-by-c';
 
 @Component({
     selector: 'jhi-main-database-dialog',
@@ -25,12 +26,16 @@ export class MainDatabaseDialogComponent implements OnInit {
 
     judicialprocesstypes: JudicialProcessType[];
 
+    descawaybycs: DescaWayByC[];
+    resolutionDateDp: any;
+
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
         private mainDatabaseService: MainDatabaseService,
         private memberStateService: MemberStateService,
         private judicialProcessTypeService: JudicialProcessTypeService,
+        private descaWayByCService: DescaWayByCService,
         private eventManager: JhiEventManager
     ) {
     }
@@ -41,6 +46,8 @@ export class MainDatabaseDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<MemberState[]>) => { this.memberstates = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.judicialProcessTypeService.query()
             .subscribe((res: HttpResponse<JudicialProcessType[]>) => { this.judicialprocesstypes = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.descaWayByCService.query()
+            .subscribe((res: HttpResponse<DescaWayByC[]>) => { this.descawaybycs = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -82,6 +89,10 @@ export class MainDatabaseDialogComponent implements OnInit {
     }
 
     trackJudicialProcessTypeById(index: number, item: JudicialProcessType) {
+        return item.id;
+    }
+
+    trackDescaWayByCById(index: number, item: DescaWayByC) {
         return item.id;
     }
 }

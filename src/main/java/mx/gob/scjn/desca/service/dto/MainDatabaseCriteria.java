@@ -10,7 +10,7 @@ import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
 
-
+import io.github.jhipster.service.filter.LocalDateFilter;
 
 
 
@@ -32,9 +32,13 @@ public class MainDatabaseCriteria implements Serializable {
 
     private StringFilter intitution;
 
+    private LocalDateFilter resolutionDate;
+
     private LongFilter memberStateId;
 
     private LongFilter judicialProcessTypeId;
+
+    private LongFilter descaWayByCId;
 
     public MainDatabaseCriteria() {
     }
@@ -63,6 +67,14 @@ public class MainDatabaseCriteria implements Serializable {
         this.intitution = intitution;
     }
 
+    public LocalDateFilter getResolutionDate() {
+        return resolutionDate;
+    }
+
+    public void setResolutionDate(LocalDateFilter resolutionDate) {
+        this.resolutionDate = resolutionDate;
+    }
+
     public LongFilter getMemberStateId() {
         return memberStateId;
     }
@@ -79,14 +91,24 @@ public class MainDatabaseCriteria implements Serializable {
         this.judicialProcessTypeId = judicialProcessTypeId;
     }
 
+    public LongFilter getDescaWayByCId() {
+        return descaWayByCId;
+    }
+
+    public void setDescaWayByCId(LongFilter descaWayByCId) {
+        this.descaWayByCId = descaWayByCId;
+    }
+
     @Override
     public String toString() {
         return "MainDatabaseCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (number != null ? "number=" + number + ", " : "") +
                 (intitution != null ? "intitution=" + intitution + ", " : "") +
+                (resolutionDate != null ? "resolutionDate=" + resolutionDate + ", " : "") +
                 (memberStateId != null ? "memberStateId=" + memberStateId + ", " : "") +
                 (judicialProcessTypeId != null ? "judicialProcessTypeId=" + judicialProcessTypeId + ", " : "") +
+                (descaWayByCId != null ? "descaWayByCId=" + descaWayByCId + ", " : "") +
             "}";
     }
 

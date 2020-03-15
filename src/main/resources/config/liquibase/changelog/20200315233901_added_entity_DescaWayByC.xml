@@ -15,34 +15,18 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
 
     <!--
-        Added the entity MainDatabase.
+        Added the entity DescaWayByC.
     -->
-    <changeSet id="20200315213207-1" author="jhipster">
-        <createTable tableName="main_database">
+    <changeSet id="20200315233901-1" author="jhipster">
+        <createTable tableName="desca_way_byc">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="jhi_number" type="varchar(255)">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
 
-            <column name="intitution" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="resolution_date" type="date">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="member_state_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="judicial_process_type_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="desca_way_byc_id" type="bigint">
+            <column name="enabled" type="bit">
                 <constraints nullable="true" />
             </column>
 

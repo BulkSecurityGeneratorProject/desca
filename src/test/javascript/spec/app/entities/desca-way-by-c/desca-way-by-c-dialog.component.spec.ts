@@ -6,41 +6,35 @@ import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { DescaTestModule } from '../../../test.module';
-import { MainDatabaseDialogComponent } from '../../../../../../main/webapp/app/entities/main-database/main-database-dialog.component';
-import { MainDatabaseService } from '../../../../../../main/webapp/app/entities/main-database/main-database.service';
-import { MainDatabase } from '../../../../../../main/webapp/app/entities/main-database/main-database.model';
-import { MemberStateService } from '../../../../../../main/webapp/app/entities/member-state';
-import { JudicialProcessTypeService } from '../../../../../../main/webapp/app/entities/judicial-process-type';
-import { DescaWayByCService } from '../../../../../../main/webapp/app/entities/desca-way-by-c';
+import { DescaWayByCDialogComponent } from '../../../../../../main/webapp/app/entities/desca-way-by-c/desca-way-by-c-dialog.component';
+import { DescaWayByCService } from '../../../../../../main/webapp/app/entities/desca-way-by-c/desca-way-by-c.service';
+import { DescaWayByC } from '../../../../../../main/webapp/app/entities/desca-way-by-c/desca-way-by-c.model';
 
 describe('Component Tests', () => {
 
-    describe('MainDatabase Management Dialog Component', () => {
-        let comp: MainDatabaseDialogComponent;
-        let fixture: ComponentFixture<MainDatabaseDialogComponent>;
-        let service: MainDatabaseService;
+    describe('DescaWayByC Management Dialog Component', () => {
+        let comp: DescaWayByCDialogComponent;
+        let fixture: ComponentFixture<DescaWayByCDialogComponent>;
+        let service: DescaWayByCService;
         let mockEventManager: any;
         let mockActiveModal: any;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [DescaTestModule],
-                declarations: [MainDatabaseDialogComponent],
+                declarations: [DescaWayByCDialogComponent],
                 providers: [
-                    MemberStateService,
-                    JudicialProcessTypeService,
-                    DescaWayByCService,
-                    MainDatabaseService
+                    DescaWayByCService
                 ]
             })
-            .overrideTemplate(MainDatabaseDialogComponent, '')
+            .overrideTemplate(DescaWayByCDialogComponent, '')
             .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(MainDatabaseDialogComponent);
+            fixture = TestBed.createComponent(DescaWayByCDialogComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(MainDatabaseService);
+            service = fixture.debugElement.injector.get(DescaWayByCService);
             mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
             mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
         });
@@ -50,9 +44,9 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const entity = new MainDatabase(123);
+                        const entity = new DescaWayByC(123);
                         spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({body: entity})));
-                        comp.mainDatabase = entity;
+                        comp.descaWayByC = entity;
                         // WHEN
                         comp.save();
                         tick(); // simulate async
@@ -60,7 +54,7 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.update).toHaveBeenCalledWith(entity);
                         expect(comp.isSaving).toEqual(false);
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'mainDatabaseListModification', content: 'OK'});
+                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'descaWayByCListModification', content: 'OK'});
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                     })
                 )
@@ -70,9 +64,9 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const entity = new MainDatabase();
+                        const entity = new DescaWayByC();
                         spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({body: entity})));
-                        comp.mainDatabase = entity;
+                        comp.descaWayByC = entity;
                         // WHEN
                         comp.save();
                         tick(); // simulate async
@@ -80,7 +74,7 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.create).toHaveBeenCalledWith(entity);
                         expect(comp.isSaving).toEqual(false);
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'mainDatabaseListModification', content: 'OK'});
+                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'descaWayByCListModification', content: 'OK'});
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                     })
                 )

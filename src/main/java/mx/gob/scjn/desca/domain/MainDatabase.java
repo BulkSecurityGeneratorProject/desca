@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -32,11 +33,17 @@ public class MainDatabase implements Serializable {
     @Column(name = "intitution")
     private String intitution;
 
+    @Column(name = "resolution_date")
+    private LocalDate resolutionDate;
+
     @ManyToOne
     private MemberState memberState;
 
     @ManyToOne
     private JudicialProcessType judicialProcessType;
+
+    @ManyToOne
+    private DescaWayByC descaWayByC;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -73,6 +80,19 @@ public class MainDatabase implements Serializable {
         this.intitution = intitution;
     }
 
+    public LocalDate getResolutionDate() {
+        return resolutionDate;
+    }
+
+    public MainDatabase resolutionDate(LocalDate resolutionDate) {
+        this.resolutionDate = resolutionDate;
+        return this;
+    }
+
+    public void setResolutionDate(LocalDate resolutionDate) {
+        this.resolutionDate = resolutionDate;
+    }
+
     public MemberState getMemberState() {
         return memberState;
     }
@@ -97,6 +117,19 @@ public class MainDatabase implements Serializable {
 
     public void setJudicialProcessType(JudicialProcessType judicialProcessType) {
         this.judicialProcessType = judicialProcessType;
+    }
+
+    public DescaWayByC getDescaWayByC() {
+        return descaWayByC;
+    }
+
+    public MainDatabase descaWayByC(DescaWayByC descaWayByC) {
+        this.descaWayByC = descaWayByC;
+        return this;
+    }
+
+    public void setDescaWayByC(DescaWayByC descaWayByC) {
+        this.descaWayByC = descaWayByC;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -126,6 +159,7 @@ public class MainDatabase implements Serializable {
             "id=" + getId() +
             ", number='" + getNumber() + "'" +
             ", intitution='" + getIntitution() + "'" +
+            ", resolutionDate='" + getResolutionDate() + "'" +
             "}";
     }
 }

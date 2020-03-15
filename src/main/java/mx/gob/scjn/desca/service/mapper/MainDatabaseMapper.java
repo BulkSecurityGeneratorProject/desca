@@ -8,15 +8,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity MainDatabase and its DTO MainDatabaseDTO.
  */
-@Mapper(componentModel = "spring", uses = {MemberStateMapper.class, JudicialProcessTypeMapper.class})
+@Mapper(componentModel = "spring", uses = {MemberStateMapper.class, JudicialProcessTypeMapper.class, DescaWayByCMapper.class})
 public interface MainDatabaseMapper extends EntityMapper<MainDatabaseDTO, MainDatabase> {
 
     @Mapping(source = "memberState.id", target = "memberStateId")
     @Mapping(source = "judicialProcessType.id", target = "judicialProcessTypeId")
+    @Mapping(source = "descaWayByC.id", target = "descaWayByCId")
     MainDatabaseDTO toDto(MainDatabase mainDatabase);
 
     @Mapping(source = "memberStateId", target = "memberState")
     @Mapping(source = "judicialProcessTypeId", target = "judicialProcessType")
+    @Mapping(source = "descaWayByCId", target = "descaWayByC")
     MainDatabase toEntity(MainDatabaseDTO mainDatabaseDTO);
 
     default MainDatabase fromId(Long id) {

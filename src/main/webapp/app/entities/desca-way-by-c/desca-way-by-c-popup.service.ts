@@ -2,17 +2,17 @@ import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
-import { MainDatabase } from './main-database.model';
-import { MainDatabaseService } from './main-database.service';
+import { DescaWayByC } from './desca-way-by-c.model';
+import { DescaWayByCService } from './desca-way-by-c.service';
 
 @Injectable()
-export class MainDatabasePopupService {
+export class DescaWayByCPopupService {
     private ngbModalRef: NgbModalRef;
 
     constructor(
         private modalService: NgbModal,
         private router: Router,
-        private mainDatabaseService: MainDatabaseService
+        private descaWayByCService: DescaWayByCService
 
     ) {
         this.ngbModalRef = null;
@@ -26,32 +26,25 @@ export class MainDatabasePopupService {
             }
 
             if (id) {
-                this.mainDatabaseService.find(id)
-                    .subscribe((mainDatabaseResponse: HttpResponse<MainDatabase>) => {
-                        const mainDatabase: MainDatabase = mainDatabaseResponse.body;
-                        if (mainDatabase.resolutionDate) {
-                            mainDatabase.resolutionDate = {
-                                year: mainDatabase.resolutionDate.getFullYear(),
-                                month: mainDatabase.resolutionDate.getMonth() + 1,
-                                day: mainDatabase.resolutionDate.getDate()
-                            };
-                        }
-                        this.ngbModalRef = this.mainDatabaseModalRef(component, mainDatabase);
+                this.descaWayByCService.find(id)
+                    .subscribe((descaWayByCResponse: HttpResponse<DescaWayByC>) => {
+                        const descaWayByC: DescaWayByC = descaWayByCResponse.body;
+                        this.ngbModalRef = this.descaWayByCModalRef(component, descaWayByC);
                         resolve(this.ngbModalRef);
                     });
             } else {
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
-                    this.ngbModalRef = this.mainDatabaseModalRef(component, new MainDatabase());
+                    this.ngbModalRef = this.descaWayByCModalRef(component, new DescaWayByC());
                     resolve(this.ngbModalRef);
                 }, 0);
             }
         });
     }
 
-    mainDatabaseModalRef(component: Component, mainDatabase: MainDatabase): NgbModalRef {
+    descaWayByCModalRef(component: Component, descaWayByC: DescaWayByC): NgbModalRef {
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.mainDatabase = mainDatabase;
+        modalRef.componentInstance.descaWayByC = descaWayByC;
         modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
             this.ngbModalRef = null;

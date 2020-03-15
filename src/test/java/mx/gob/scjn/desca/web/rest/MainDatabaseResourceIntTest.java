@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.MainDatabase;
 import mx.gob.scjn.desca.domain.MemberState;
 import mx.gob.scjn.desca.domain.JudicialProcessType;
+import mx.gob.scjn.desca.domain.DescaWayByC;
 import mx.gob.scjn.desca.repository.MainDatabaseRepository;
 import mx.gob.scjn.desca.service.MainDatabaseService;
 import mx.gob.scjn.desca.repository.search.MainDatabaseSearchRepository;
@@ -29,6 +30,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import static mx.gob.scjn.desca.web.rest.TestUtil.createFormattingConversionService;
@@ -51,6 +54,9 @@ public class MainDatabaseResourceIntTest {
 
     private static final String DEFAULT_INTITUTION = "AAAAAAAAAA";
     private static final String UPDATED_INTITUTION = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_RESOLUTION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_RESOLUTION_DATE = LocalDate.now(ZoneId.systemDefault());
 
     @Autowired
     private MainDatabaseRepository mainDatabaseRepository;
@@ -103,7 +109,8 @@ public class MainDatabaseResourceIntTest {
     public static MainDatabase createEntity(EntityManager em) {
         MainDatabase mainDatabase = new MainDatabase()
             .number(DEFAULT_NUMBER)
-            .intitution(DEFAULT_INTITUTION);
+            .intitution(DEFAULT_INTITUTION)
+            .resolutionDate(DEFAULT_RESOLUTION_DATE);
         return mainDatabase;
     }
 
@@ -131,6 +138,7 @@ public class MainDatabaseResourceIntTest {
         MainDatabase testMainDatabase = mainDatabaseList.get(mainDatabaseList.size() - 1);
         assertThat(testMainDatabase.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testMainDatabase.getIntitution()).isEqualTo(DEFAULT_INTITUTION);
+        assertThat(testMainDatabase.getResolutionDate()).isEqualTo(DEFAULT_RESOLUTION_DATE);
 
         // Validate the MainDatabase in Elasticsearch
         MainDatabase mainDatabaseEs = mainDatabaseSearchRepository.findOne(testMainDatabase.getId());
@@ -188,7 +196,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
-            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())))
+            .andExpect(jsonPath("$.[*].resolutionDate").value(hasItem(DEFAULT_RESOLUTION_DATE.toString())));
     }
 
     @Test
@@ -203,7 +212,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(mainDatabase.getId().intValue()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER.toString()))
-            .andExpect(jsonPath("$.intitution").value(DEFAULT_INTITUTION.toString()));
+            .andExpect(jsonPath("$.intitution").value(DEFAULT_INTITUTION.toString()))
+            .andExpect(jsonPath("$.resolutionDate").value(DEFAULT_RESOLUTION_DATE.toString()));
     }
 
     @Test
@@ -286,6 +296,72 @@ public class MainDatabaseResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllMainDatabasesByResolutionDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where resolutionDate equals to DEFAULT_RESOLUTION_DATE
+        defaultMainDatabaseShouldBeFound("resolutionDate.equals=" + DEFAULT_RESOLUTION_DATE);
+
+        // Get all the mainDatabaseList where resolutionDate equals to UPDATED_RESOLUTION_DATE
+        defaultMainDatabaseShouldNotBeFound("resolutionDate.equals=" + UPDATED_RESOLUTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByResolutionDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where resolutionDate in DEFAULT_RESOLUTION_DATE or UPDATED_RESOLUTION_DATE
+        defaultMainDatabaseShouldBeFound("resolutionDate.in=" + DEFAULT_RESOLUTION_DATE + "," + UPDATED_RESOLUTION_DATE);
+
+        // Get all the mainDatabaseList where resolutionDate equals to UPDATED_RESOLUTION_DATE
+        defaultMainDatabaseShouldNotBeFound("resolutionDate.in=" + UPDATED_RESOLUTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByResolutionDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where resolutionDate is not null
+        defaultMainDatabaseShouldBeFound("resolutionDate.specified=true");
+
+        // Get all the mainDatabaseList where resolutionDate is null
+        defaultMainDatabaseShouldNotBeFound("resolutionDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByResolutionDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where resolutionDate greater than or equals to DEFAULT_RESOLUTION_DATE
+        defaultMainDatabaseShouldBeFound("resolutionDate.greaterOrEqualThan=" + DEFAULT_RESOLUTION_DATE);
+
+        // Get all the mainDatabaseList where resolutionDate greater than or equals to UPDATED_RESOLUTION_DATE
+        defaultMainDatabaseShouldNotBeFound("resolutionDate.greaterOrEqualThan=" + UPDATED_RESOLUTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByResolutionDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+
+        // Get all the mainDatabaseList where resolutionDate less than or equals to DEFAULT_RESOLUTION_DATE
+        defaultMainDatabaseShouldNotBeFound("resolutionDate.lessThan=" + DEFAULT_RESOLUTION_DATE);
+
+        // Get all the mainDatabaseList where resolutionDate less than or equals to UPDATED_RESOLUTION_DATE
+        defaultMainDatabaseShouldBeFound("resolutionDate.lessThan=" + UPDATED_RESOLUTION_DATE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMainDatabasesByMemberStateIsEqualToSomething() throws Exception {
         // Initialize the database
         MemberState memberState = MemberStateResourceIntTest.createEntity(em);
@@ -321,6 +397,25 @@ public class MainDatabaseResourceIntTest {
         defaultMainDatabaseShouldNotBeFound("judicialProcessTypeId.equals=" + (judicialProcessTypeId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMainDatabasesByDescaWayByCIsEqualToSomething() throws Exception {
+        // Initialize the database
+        DescaWayByC descaWayByC = DescaWayByCResourceIntTest.createEntity(em);
+        em.persist(descaWayByC);
+        em.flush();
+        mainDatabase.setDescaWayByC(descaWayByC);
+        mainDatabaseRepository.saveAndFlush(mainDatabase);
+        Long descaWayByCId = descaWayByC.getId();
+
+        // Get all the mainDatabaseList where descaWayByC equals to descaWayByCId
+        defaultMainDatabaseShouldBeFound("descaWayByCId.equals=" + descaWayByCId);
+
+        // Get all the mainDatabaseList where descaWayByC equals to descaWayByCId + 1
+        defaultMainDatabaseShouldNotBeFound("descaWayByCId.equals=" + (descaWayByCId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -330,7 +425,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
-            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())))
+            .andExpect(jsonPath("$.[*].resolutionDate").value(hasItem(DEFAULT_RESOLUTION_DATE.toString())));
     }
 
     /**
@@ -367,7 +463,8 @@ public class MainDatabaseResourceIntTest {
         em.detach(updatedMainDatabase);
         updatedMainDatabase
             .number(UPDATED_NUMBER)
-            .intitution(UPDATED_INTITUTION);
+            .intitution(UPDATED_INTITUTION)
+            .resolutionDate(UPDATED_RESOLUTION_DATE);
         MainDatabaseDTO mainDatabaseDTO = mainDatabaseMapper.toDto(updatedMainDatabase);
 
         restMainDatabaseMockMvc.perform(put("/api/main-databases")
@@ -381,6 +478,7 @@ public class MainDatabaseResourceIntTest {
         MainDatabase testMainDatabase = mainDatabaseList.get(mainDatabaseList.size() - 1);
         assertThat(testMainDatabase.getNumber()).isEqualTo(UPDATED_NUMBER);
         assertThat(testMainDatabase.getIntitution()).isEqualTo(UPDATED_INTITUTION);
+        assertThat(testMainDatabase.getResolutionDate()).isEqualTo(UPDATED_RESOLUTION_DATE);
 
         // Validate the MainDatabase in Elasticsearch
         MainDatabase mainDatabaseEs = mainDatabaseSearchRepository.findOne(testMainDatabase.getId());
@@ -441,7 +539,8 @@ public class MainDatabaseResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mainDatabase.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
-            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())));
+            .andExpect(jsonPath("$.[*].intitution").value(hasItem(DEFAULT_INTITUTION.toString())))
+            .andExpect(jsonPath("$.[*].resolutionDate").value(hasItem(DEFAULT_RESOLUTION_DATE.toString())));
     }
 
     @Test

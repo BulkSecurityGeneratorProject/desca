@@ -1,0 +1,24 @@
+
+{
+    "descaApp": {
+        "descaWayByC" : {
+            "home": {
+                "title": "Desca Way By CS",
+                "createLabel": "Create a new Desca Way By C",
+                "createOrEditLabel": "Create or edit a Desca Way By C",
+                "search": "Search for Desca Way By C"
+            },
+            "created": "A new Desca Way By C is created with identifier {{ param }}",
+            "updated": "A Desca Way By C is updated with identifier {{ param }}",
+            "deleted": "A Desca Way By C is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Desca Way By C {{ id }}?"
+            },
+            "detail": {
+                "title": "Desca Way By C"
+            },
+            "name": "Name",
+            "enabled": "Enabled"
+        }
+    }
+}

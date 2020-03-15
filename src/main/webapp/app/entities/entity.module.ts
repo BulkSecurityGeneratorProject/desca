@@ -11,6 +11,7 @@ import { DescaVulnerableGroupModule } from './vulnerable-group/vulnerable-group.
 import { DescaRepairTypeModule } from './repair-type/repair-type.module';
 import { DescaRepairModule } from './repair/repair.module';
 import { DescaMainDatabaseModule } from './main-database/main-database.module';
+import { DescaDescaWayByCModule } from './desca-way-by-c/desca-way-by-c.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -26,6 +27,7 @@ import { DescaMainDatabaseModule } from './main-database/main-database.module';
         DescaRepairTypeModule,
         DescaRepairModule,
         DescaMainDatabaseModule,
+        DescaDescaWayByCModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

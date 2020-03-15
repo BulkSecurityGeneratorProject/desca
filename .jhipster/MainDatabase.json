@@ -12,6 +12,12 @@
             "otherEntityName": "judicialProcessType",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "descaWayByC",
+            "otherEntityName": "descaWayByC",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [
@@ -25,6 +31,10 @@
         {
             "fieldName": "intitution",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "resolutionDate",
+            "fieldType": "LocalDate"
         }
     ],
     "changelogDate": "20200315213207",

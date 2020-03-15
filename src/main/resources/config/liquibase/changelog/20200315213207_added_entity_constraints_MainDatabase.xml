@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jud_proc_type"/>
 
+        <addForeignKeyConstraint baseColumnNames="desca_way_byc_id"
+                                 baseTableName="main_database"
+                                 constraintName="fk_main_database_desca_way_byc_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="desca_way_byc"/>
+
     </changeSet>
 </databaseChangeLog>

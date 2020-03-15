@@ -12,6 +12,10 @@
         <dd>
             <span>{{mainDatabase.intitution}}</span>
         </dd>
+        <dt><span jhiTranslate="descaApp.mainDatabase.resolutionDate">Resolution Date</span></dt>
+        <dd>
+            <span>{{mainDatabase.resolutionDate | date:'mediumDate'}}</span>
+        </dd>
         <dt><span jhiTranslate="descaApp.mainDatabase.memberState">Member State</span></dt>
         <dd>
             <div *ngIf="mainDatabase.memberStateId">
@@ -22,6 +26,12 @@
         <dd>
             <div *ngIf="mainDatabase.judicialProcessTypeId">
                 <a [routerLink]="['/judicial-process-type', mainDatabase.judicialProcessTypeId]">{{mainDatabase.judicialProcessTypeId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="descaApp.mainDatabase.descaWayByC">Desca Way By C</span></dt>
+        <dd>
+            <div *ngIf="mainDatabase.descaWayByCId">
+                <a [routerLink]="['/desca-way-by-c', mainDatabase.descaWayByCId]">{{mainDatabase.descaWayByCId}}</a>
             </div>
         </dd>
     </dl>
