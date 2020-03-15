@@ -10,8 +10,6 @@ import { DescaMethodologyModule } from './methodology/methodology.module';
 import { DescaVulnerableGroupModule } from './vulnerable-group/vulnerable-group.module';
 import { DescaRepairTypeModule } from './repair-type/repair-type.module';
 import { DescaRepairModule } from './repair/repair.module';
-import { DescaCountryModule } from './country/country.module';
-import { DescaInstitutionModule } from './institution/institution.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -26,8 +24,6 @@ import { DescaInstitutionModule } from './institution/institution.module';
         DescaVulnerableGroupModule,
         DescaRepairTypeModule,
         DescaRepairModule,
-        DescaCountryModule,
-        DescaInstitutionModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

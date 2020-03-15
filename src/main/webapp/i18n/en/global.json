@@ -17,8 +17,6 @@
                 "vulnerableGroup": "Vulnerable Group",
                 "repairType": "Repair Type",
                 "repair": "Repair",
-                "country": "Country",
-                "institution": "Institution",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
