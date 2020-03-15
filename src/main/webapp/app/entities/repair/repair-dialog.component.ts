@@ -4,11 +4,12 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { Repair } from './repair.model';
 import { RepairPopupService } from './repair-popup.service';
 import { RepairService } from './repair.service';
+import { RepairType, RepairTypeService } from '../repair-type';
 
 @Component({
     selector: 'jhi-repair-dialog',
@@ -19,15 +20,21 @@ export class RepairDialogComponent implements OnInit {
     repair: Repair;
     isSaving: boolean;
 
+    repairtypes: RepairType[];
+
     constructor(
         public activeModal: NgbActiveModal,
+        private jhiAlertService: JhiAlertService,
         private repairService: RepairService,
+        private repairTypeService: RepairTypeService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.repairTypeService.query()
+            .subscribe((res: HttpResponse<RepairType[]>) => { this.repairtypes = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -58,6 +65,14 @@ export class RepairDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackRepairTypeById(index: number, item: RepairType) {
+        return item.id;
     }
 }
 

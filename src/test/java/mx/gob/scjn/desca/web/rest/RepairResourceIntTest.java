@@ -3,6 +3,7 @@ package mx.gob.scjn.desca.web.rest;
 import mx.gob.scjn.desca.DescaApp;
 
 import mx.gob.scjn.desca.domain.Repair;
+import mx.gob.scjn.desca.domain.RepairType;
 import mx.gob.scjn.desca.repository.RepairRepository;
 import mx.gob.scjn.desca.service.RepairService;
 import mx.gob.scjn.desca.repository.search.RepairSearchRepository;
@@ -281,6 +282,25 @@ public class RepairResourceIntTest {
         // Get all the repairList where enabled is null
         defaultRepairShouldNotBeFound("enabled.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllRepairsByRepairTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        RepairType repairType = RepairTypeResourceIntTest.createEntity(em);
+        em.persist(repairType);
+        em.flush();
+        repair.setRepairType(repairType);
+        repairRepository.saveAndFlush(repair);
+        Long repairTypeId = repairType.getId();
+
+        // Get all the repairList where repairType equals to repairTypeId
+        defaultRepairShouldBeFound("repairTypeId.equals=" + repairTypeId);
+
+        // Get all the repairList where repairType equals to repairTypeId + 1
+        defaultRepairShouldNotBeFound("repairTypeId.equals=" + (repairTypeId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */

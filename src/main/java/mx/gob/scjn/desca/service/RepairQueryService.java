@@ -88,6 +88,9 @@ public class RepairQueryService extends QueryService<Repair> {
             if (criteria.getEnabled() != null) {
                 specification = specification.and(buildSpecification(criteria.getEnabled(), Repair_.enabled));
             }
+            if (criteria.getRepairTypeId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getRepairTypeId(), Repair_.repairType, RepairType_.id));
+            }
         }
         return specification;
     }

@@ -32,6 +32,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="name"><span jhiTranslate="descaApp.repair.name">Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="enabled"><span jhiTranslate="descaApp.repair.enabled">Enabled</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="repairTypeId"><span jhiTranslate="descaApp.repair.repairType">Repair Type</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -40,6 +41,11 @@
                 <td><a [routerLink]="['../repair', repair.id ]">{{repair.id}}</a></td>
                 <td>{{repair.name}}</td>
                 <td>{{repair.enabled}}</td>
+                <td>
+                    <div *ngIf="repair.repairTypeId">
+                        <a [routerLink]="['../repair-type', repair.repairTypeId  ]" >{{repair.repairTypeId}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

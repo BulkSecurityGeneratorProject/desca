@@ -32,6 +32,9 @@ public class Repair implements Serializable {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @ManyToOne
+    private RepairType repairType;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -65,6 +68,19 @@ public class Repair implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public RepairType getRepairType() {
+        return repairType;
+    }
+
+    public Repair repairType(RepairType repairType) {
+        this.repairType = repairType;
+        return this;
+    }
+
+    public void setRepairType(RepairType repairType) {
+        this.repairType = repairType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

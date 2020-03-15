@@ -32,6 +32,8 @@ public class RepairCriteria implements Serializable {
 
     private BooleanFilter enabled;
 
+    private LongFilter repairTypeId;
+
     public RepairCriteria() {
     }
 
@@ -59,12 +61,21 @@ public class RepairCriteria implements Serializable {
         this.enabled = enabled;
     }
 
+    public LongFilter getRepairTypeId() {
+        return repairTypeId;
+    }
+
+    public void setRepairTypeId(LongFilter repairTypeId) {
+        this.repairTypeId = repairTypeId;
+    }
+
     @Override
     public String toString() {
         return "RepairCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (enabled != null ? "enabled=" + enabled + ", " : "") +
+                (repairTypeId != null ? "repairTypeId=" + repairTypeId + ", " : "") +
             "}";
     }
 

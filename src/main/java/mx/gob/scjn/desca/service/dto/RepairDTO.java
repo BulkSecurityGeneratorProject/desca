@@ -3,6 +3,8 @@ package mx.gob.scjn.desca.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -16,6 +18,8 @@ public class RepairDTO implements Serializable {
     private String name;
 
     private Boolean enabled;
+
+    private Long repairTypeId;
 
     public Long getId() {
         return id;
@@ -39,6 +43,14 @@ public class RepairDTO implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Long getRepairTypeId() {
+        return repairTypeId;
+    }
+
+    public void setRepairTypeId(Long repairTypeId) {
+        this.repairTypeId = repairTypeId;
     }
 
     @Override

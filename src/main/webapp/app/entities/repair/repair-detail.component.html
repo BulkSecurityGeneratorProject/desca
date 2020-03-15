@@ -12,6 +12,12 @@
         <dd>
             <span>{{repair.enabled}}</span>
         </dd>
+        <dt><span jhiTranslate="descaApp.repair.repairType">Repair Type</span></dt>
+        <dd>
+            <div *ngIf="repair.repairTypeId">
+                <a [routerLink]="['/repair-type', repair.repairTypeId]">{{repair.repairTypeId}}</a>
+            </div>
+        </dd>
     </dl>
 
     <button type="submit"

@@ -9,6 +9,7 @@ import { DescaTestModule } from '../../../test.module';
 import { RepairDialogComponent } from '../../../../../../main/webapp/app/entities/repair/repair-dialog.component';
 import { RepairService } from '../../../../../../main/webapp/app/entities/repair/repair.service';
 import { Repair } from '../../../../../../main/webapp/app/entities/repair/repair.model';
+import { RepairTypeService } from '../../../../../../main/webapp/app/entities/repair-type';
 
 describe('Component Tests', () => {
 
@@ -24,6 +25,7 @@ describe('Component Tests', () => {
                 imports: [DescaTestModule],
                 declarations: [RepairDialogComponent],
                 providers: [
+                    RepairTypeService,
                     RepairService
                 ]
             })

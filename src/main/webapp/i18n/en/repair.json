@@ -18,7 +18,8 @@
                 "title": "Repair"
             },
             "name": "Name",
-            "enabled": "Enabled"
+            "enabled": "Enabled",
+            "repairType": "Repair Type"
         }
     }
 }

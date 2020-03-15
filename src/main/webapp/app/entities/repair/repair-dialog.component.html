@@ -29,6 +29,13 @@
                 [(ngModel)]="repair.enabled" />
         </div>
 
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="descaApp.repair.repairType" for="field_repairType">Repair Type</label>
+            <select class="form-control" id="field_repairType" name="repairType" [(ngModel)]="repair.repairTypeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="repairTypeOption.id" *ngFor="let repairTypeOption of repairtypes; trackBy: trackRepairTypeById">{{repairTypeOption.id}}</option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

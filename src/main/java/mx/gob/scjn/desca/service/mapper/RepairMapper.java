@@ -8,10 +8,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Repair and its DTO RepairDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {RepairTypeMapper.class})
 public interface RepairMapper extends EntityMapper<RepairDTO, Repair> {
 
+    @Mapping(source = "repairType.id", target = "repairTypeId")
+    RepairDTO toDto(Repair repair);
 
+    @Mapping(source = "repairTypeId", target = "repairType")
+    Repair toEntity(RepairDTO repairDTO);
 
     default Repair fromId(Long id) {
         if (id == null) {
