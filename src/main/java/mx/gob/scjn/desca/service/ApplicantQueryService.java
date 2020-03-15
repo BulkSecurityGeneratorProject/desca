@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.Applicant;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.ApplicantRepository;
+import mx.gob.scjn.desca.repository.search.ApplicantSearchRepository;
 import mx.gob.scjn.desca.service.dto.ApplicantCriteria;
 
 import mx.gob.scjn.desca.service.dto.ApplicantDTO;
@@ -38,9 +39,12 @@ public class ApplicantQueryService extends QueryService<Applicant> {
 
     private final ApplicantMapper applicantMapper;
 
-    public ApplicantQueryService(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper) {
+    private final ApplicantSearchRepository applicantSearchRepository;
+
+    public ApplicantQueryService(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, ApplicantSearchRepository applicantSearchRepository) {
         this.applicantRepository = applicantRepository;
         this.applicantMapper = applicantMapper;
+        this.applicantSearchRepository = applicantSearchRepository;
     }
 
     /**

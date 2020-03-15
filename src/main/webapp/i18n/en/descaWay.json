@@ -5,7 +5,8 @@
             "home": {
                 "title": "Desca Ways",
                 "createLabel": "Create a new Desca Way",
-                "createOrEditLabel": "Create or edit a Desca Way"
+                "createOrEditLabel": "Create or edit a Desca Way",
+                "search": "Search for Desca Way"
             },
             "created": "A new Desca Way is created with identifier {{ param }}",
             "updated": "A Desca Way is updated with identifier {{ param }}",

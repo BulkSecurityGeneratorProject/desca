@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.Methodology;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.MethodologyRepository;
+import mx.gob.scjn.desca.repository.search.MethodologySearchRepository;
 import mx.gob.scjn.desca.service.dto.MethodologyCriteria;
 
 import mx.gob.scjn.desca.service.dto.MethodologyDTO;
@@ -38,9 +39,12 @@ public class MethodologyQueryService extends QueryService<Methodology> {
 
     private final MethodologyMapper methodologyMapper;
 
-    public MethodologyQueryService(MethodologyRepository methodologyRepository, MethodologyMapper methodologyMapper) {
+    private final MethodologySearchRepository methodologySearchRepository;
+
+    public MethodologyQueryService(MethodologyRepository methodologyRepository, MethodologyMapper methodologyMapper, MethodologySearchRepository methodologySearchRepository) {
         this.methodologyRepository = methodologyRepository;
         this.methodologyMapper = methodologyMapper;
+        this.methodologySearchRepository = methodologySearchRepository;
     }
 
     /**

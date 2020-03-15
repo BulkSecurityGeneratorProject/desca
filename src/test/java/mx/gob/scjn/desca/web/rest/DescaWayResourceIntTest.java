@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.DescaWay;
 import mx.gob.scjn.desca.repository.DescaWayRepository;
 import mx.gob.scjn.desca.service.DescaWayService;
+import mx.gob.scjn.desca.repository.search.DescaWaySearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaWayDTO;
 import mx.gob.scjn.desca.service.mapper.DescaWayMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class DescaWayResourceIntTest {
     private DescaWayService descaWayService;
 
     @Autowired
+    private DescaWaySearchRepository descaWaySearchRepository;
+
+    @Autowired
     private DescaWayQueryService descaWayQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class DescaWayResourceIntTest {
 
     @Before
     public void initTest() {
+        descaWaySearchRepository.deleteAll();
         descaWay = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class DescaWayResourceIntTest {
         DescaWay testDescaWay = descaWayList.get(descaWayList.size() - 1);
         assertThat(testDescaWay.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testDescaWay.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the DescaWay in Elasticsearch
+        DescaWay descaWayEs = descaWaySearchRepository.findOne(testDescaWay.getId());
+        assertThat(descaWayEs).isEqualToIgnoringGivenFields(testDescaWay);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class DescaWayResourceIntTest {
     public void updateDescaWay() throws Exception {
         // Initialize the database
         descaWayRepository.saveAndFlush(descaWay);
+        descaWaySearchRepository.save(descaWay);
         int databaseSizeBeforeUpdate = descaWayRepository.findAll().size();
 
         // Update the descaWay
@@ -350,6 +360,10 @@ public class DescaWayResourceIntTest {
         DescaWay testDescaWay = descaWayList.get(descaWayList.size() - 1);
         assertThat(testDescaWay.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testDescaWay.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the DescaWay in Elasticsearch
+        DescaWay descaWayEs = descaWaySearchRepository.findOne(testDescaWay.getId());
+        assertThat(descaWayEs).isEqualToIgnoringGivenFields(testDescaWay);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class DescaWayResourceIntTest {
     public void deleteDescaWay() throws Exception {
         // Initialize the database
         descaWayRepository.saveAndFlush(descaWay);
+        descaWaySearchRepository.save(descaWay);
         int databaseSizeBeforeDelete = descaWayRepository.findAll().size();
 
         // Get the descaWay
@@ -383,9 +398,29 @@ public class DescaWayResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean descaWayExistsInEs = descaWaySearchRepository.exists(descaWay.getId());
+        assertThat(descaWayExistsInEs).isFalse();
+
         // Validate the database is empty
         List<DescaWay> descaWayList = descaWayRepository.findAll();
         assertThat(descaWayList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchDescaWay() throws Exception {
+        // Initialize the database
+        descaWayRepository.saveAndFlush(descaWay);
+        descaWaySearchRepository.save(descaWay);
+
+        // Search the descaWay
+        restDescaWayMockMvc.perform(get("/api/_search/desca-ways?query=id:" + descaWay.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(descaWay.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

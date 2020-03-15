@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.Desca;
 import mx.gob.scjn.desca.repository.DescaRepository;
 import mx.gob.scjn.desca.service.DescaService;
+import mx.gob.scjn.desca.repository.search.DescaSearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaDTO;
 import mx.gob.scjn.desca.service.mapper.DescaMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class DescaResourceIntTest {
     private DescaService descaService;
 
     @Autowired
+    private DescaSearchRepository descaSearchRepository;
+
+    @Autowired
     private DescaQueryService descaQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class DescaResourceIntTest {
 
     @Before
     public void initTest() {
+        descaSearchRepository.deleteAll();
         desca = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class DescaResourceIntTest {
         Desca testDesca = descaList.get(descaList.size() - 1);
         assertThat(testDesca.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testDesca.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the Desca in Elasticsearch
+        Desca descaEs = descaSearchRepository.findOne(testDesca.getId());
+        assertThat(descaEs).isEqualToIgnoringGivenFields(testDesca);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class DescaResourceIntTest {
     public void updateDesca() throws Exception {
         // Initialize the database
         descaRepository.saveAndFlush(desca);
+        descaSearchRepository.save(desca);
         int databaseSizeBeforeUpdate = descaRepository.findAll().size();
 
         // Update the desca
@@ -350,6 +360,10 @@ public class DescaResourceIntTest {
         Desca testDesca = descaList.get(descaList.size() - 1);
         assertThat(testDesca.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testDesca.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the Desca in Elasticsearch
+        Desca descaEs = descaSearchRepository.findOne(testDesca.getId());
+        assertThat(descaEs).isEqualToIgnoringGivenFields(testDesca);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class DescaResourceIntTest {
     public void deleteDesca() throws Exception {
         // Initialize the database
         descaRepository.saveAndFlush(desca);
+        descaSearchRepository.save(desca);
         int databaseSizeBeforeDelete = descaRepository.findAll().size();
 
         // Get the desca
@@ -383,9 +398,29 @@ public class DescaResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean descaExistsInEs = descaSearchRepository.exists(desca.getId());
+        assertThat(descaExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Desca> descaList = descaRepository.findAll();
         assertThat(descaList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchDesca() throws Exception {
+        // Initialize the database
+        descaRepository.saveAndFlush(desca);
+        descaSearchRepository.save(desca);
+
+        // Search the desca
+        restDescaMockMvc.perform(get("/api/_search/descas?query=id:" + desca.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(desca.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

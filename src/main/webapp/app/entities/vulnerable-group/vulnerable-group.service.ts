@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<VulnerableGroup>;
 export class VulnerableGroupService {
 
     private resourceUrl =  SERVER_API_URL + 'api/vulnerable-groups';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/vulnerable-groups';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class VulnerableGroupService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<VulnerableGroup[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<VulnerableGroup[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<VulnerableGroup[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

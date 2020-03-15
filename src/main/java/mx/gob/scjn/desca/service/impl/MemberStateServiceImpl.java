@@ -3,6 +3,7 @@ package mx.gob.scjn.desca.service.impl;
 import mx.gob.scjn.desca.service.MemberStateService;
 import mx.gob.scjn.desca.domain.MemberState;
 import mx.gob.scjn.desca.repository.MemberStateRepository;
+import mx.gob.scjn.desca.repository.search.MemberStateSearchRepository;
 import mx.gob.scjn.desca.service.dto.MemberStateDTO;
 import mx.gob.scjn.desca.service.mapper.MemberStateMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing MemberState.
@@ -26,9 +29,12 @@ public class MemberStateServiceImpl implements MemberStateService {
 
     private final MemberStateMapper memberStateMapper;
 
-    public MemberStateServiceImpl(MemberStateRepository memberStateRepository, MemberStateMapper memberStateMapper) {
+    private final MemberStateSearchRepository memberStateSearchRepository;
+
+    public MemberStateServiceImpl(MemberStateRepository memberStateRepository, MemberStateMapper memberStateMapper, MemberStateSearchRepository memberStateSearchRepository) {
         this.memberStateRepository = memberStateRepository;
         this.memberStateMapper = memberStateMapper;
+        this.memberStateSearchRepository = memberStateSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class MemberStateServiceImpl implements MemberStateService {
         log.debug("Request to save MemberState : {}", memberStateDTO);
         MemberState memberState = memberStateMapper.toEntity(memberStateDTO);
         memberState = memberStateRepository.save(memberState);
-        return memberStateMapper.toDto(memberState);
+        MemberStateDTO result = memberStateMapper.toDto(memberState);
+        memberStateSearchRepository.save(memberState);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class MemberStateServiceImpl implements MemberStateService {
     public void delete(Long id) {
         log.debug("Request to delete MemberState : {}", id);
         memberStateRepository.delete(id);
+        memberStateSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the memberState corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<MemberStateDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of MemberStates for query {}", query);
+        Page<MemberState> result = memberStateSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(memberStateMapper::toDto);
     }
 }

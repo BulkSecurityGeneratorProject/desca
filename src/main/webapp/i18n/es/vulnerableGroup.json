@@ -5,7 +5,8 @@
             "home": {
                 "title": "Vulnerable Groups",
                 "createLabel": "Crear nuevo Vulnerable Group",
-                "createOrEditLabel": "Crear o editar Vulnerable Group"
+                "createOrEditLabel": "Crear o editar Vulnerable Group",
+                "search": "Search for Vulnerable Group"
             },
             "created": "Un nuevo Vulnerable Group ha sido creado con el identificador {{ param }}",
             "updated": "Un Vulnerable Group ha sido actualizado con el identificador {{ param }}",

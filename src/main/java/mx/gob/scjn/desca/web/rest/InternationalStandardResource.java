@@ -24,6 +24,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing InternationalStandard.
@@ -130,4 +133,22 @@ public class InternationalStandardResource {
         internationalStandardService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/international-standards?query=:query : search for the internationalStandard corresponding
+     * to the query.
+     *
+     * @param query the query of the internationalStandard search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/international-standards")
+    @Timed
+    public ResponseEntity<List<InternationalStandardDTO>> searchInternationalStandards(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of InternationalStandards for query {}", query);
+        Page<InternationalStandardDTO> page = internationalStandardService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/international-standards");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

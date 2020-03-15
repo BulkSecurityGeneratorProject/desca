@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.DescaWay;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.DescaWayRepository;
+import mx.gob.scjn.desca.repository.search.DescaWaySearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaWayCriteria;
 
 import mx.gob.scjn.desca.service.dto.DescaWayDTO;
@@ -38,9 +39,12 @@ public class DescaWayQueryService extends QueryService<DescaWay> {
 
     private final DescaWayMapper descaWayMapper;
 
-    public DescaWayQueryService(DescaWayRepository descaWayRepository, DescaWayMapper descaWayMapper) {
+    private final DescaWaySearchRepository descaWaySearchRepository;
+
+    public DescaWayQueryService(DescaWayRepository descaWayRepository, DescaWayMapper descaWayMapper, DescaWaySearchRepository descaWaySearchRepository) {
         this.descaWayRepository = descaWayRepository;
         this.descaWayMapper = descaWayMapper;
+        this.descaWaySearchRepository = descaWaySearchRepository;
     }
 
     /**

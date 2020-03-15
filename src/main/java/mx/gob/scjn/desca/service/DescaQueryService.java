@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.Desca;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.DescaRepository;
+import mx.gob.scjn.desca.repository.search.DescaSearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaCriteria;
 
 import mx.gob.scjn.desca.service.dto.DescaDTO;
@@ -38,9 +39,12 @@ public class DescaQueryService extends QueryService<Desca> {
 
     private final DescaMapper descaMapper;
 
-    public DescaQueryService(DescaRepository descaRepository, DescaMapper descaMapper) {
+    private final DescaSearchRepository descaSearchRepository;
+
+    public DescaQueryService(DescaRepository descaRepository, DescaMapper descaMapper, DescaSearchRepository descaSearchRepository) {
         this.descaRepository = descaRepository;
         this.descaMapper = descaMapper;
+        this.descaSearchRepository = descaSearchRepository;
     }
 
     /**

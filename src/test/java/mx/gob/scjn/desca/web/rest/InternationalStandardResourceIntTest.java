@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.InternationalStandard;
 import mx.gob.scjn.desca.repository.InternationalStandardRepository;
 import mx.gob.scjn.desca.service.InternationalStandardService;
+import mx.gob.scjn.desca.repository.search.InternationalStandardSearchRepository;
 import mx.gob.scjn.desca.service.dto.InternationalStandardDTO;
 import mx.gob.scjn.desca.service.mapper.InternationalStandardMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class InternationalStandardResourceIntTest {
     private InternationalStandardService internationalStandardService;
 
     @Autowired
+    private InternationalStandardSearchRepository internationalStandardSearchRepository;
+
+    @Autowired
     private InternationalStandardQueryService internationalStandardQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class InternationalStandardResourceIntTest {
 
     @Before
     public void initTest() {
+        internationalStandardSearchRepository.deleteAll();
         internationalStandard = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class InternationalStandardResourceIntTest {
         InternationalStandard testInternationalStandard = internationalStandardList.get(internationalStandardList.size() - 1);
         assertThat(testInternationalStandard.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testInternationalStandard.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the InternationalStandard in Elasticsearch
+        InternationalStandard internationalStandardEs = internationalStandardSearchRepository.findOne(testInternationalStandard.getId());
+        assertThat(internationalStandardEs).isEqualToIgnoringGivenFields(testInternationalStandard);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class InternationalStandardResourceIntTest {
     public void updateInternationalStandard() throws Exception {
         // Initialize the database
         internationalStandardRepository.saveAndFlush(internationalStandard);
+        internationalStandardSearchRepository.save(internationalStandard);
         int databaseSizeBeforeUpdate = internationalStandardRepository.findAll().size();
 
         // Update the internationalStandard
@@ -350,6 +360,10 @@ public class InternationalStandardResourceIntTest {
         InternationalStandard testInternationalStandard = internationalStandardList.get(internationalStandardList.size() - 1);
         assertThat(testInternationalStandard.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testInternationalStandard.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the InternationalStandard in Elasticsearch
+        InternationalStandard internationalStandardEs = internationalStandardSearchRepository.findOne(testInternationalStandard.getId());
+        assertThat(internationalStandardEs).isEqualToIgnoringGivenFields(testInternationalStandard);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class InternationalStandardResourceIntTest {
     public void deleteInternationalStandard() throws Exception {
         // Initialize the database
         internationalStandardRepository.saveAndFlush(internationalStandard);
+        internationalStandardSearchRepository.save(internationalStandard);
         int databaseSizeBeforeDelete = internationalStandardRepository.findAll().size();
 
         // Get the internationalStandard
@@ -383,9 +398,29 @@ public class InternationalStandardResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean internationalStandardExistsInEs = internationalStandardSearchRepository.exists(internationalStandard.getId());
+        assertThat(internationalStandardExistsInEs).isFalse();
+
         // Validate the database is empty
         List<InternationalStandard> internationalStandardList = internationalStandardRepository.findAll();
         assertThat(internationalStandardList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchInternationalStandard() throws Exception {
+        // Initialize the database
+        internationalStandardRepository.saveAndFlush(internationalStandard);
+        internationalStandardSearchRepository.save(internationalStandard);
+
+        // Search the internationalStandard
+        restInternationalStandardMockMvc.perform(get("/api/_search/international-standards?query=id:" + internationalStandard.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(internationalStandard.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

@@ -24,6 +24,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing VulnerableGroup.
@@ -130,4 +133,22 @@ public class VulnerableGroupResource {
         vulnerableGroupService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/vulnerable-groups?query=:query : search for the vulnerableGroup corresponding
+     * to the query.
+     *
+     * @param query the query of the vulnerableGroup search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/vulnerable-groups")
+    @Timed
+    public ResponseEntity<List<VulnerableGroupDTO>> searchVulnerableGroups(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of VulnerableGroups for query {}", query);
+        Page<VulnerableGroupDTO> page = vulnerableGroupService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/vulnerable-groups");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

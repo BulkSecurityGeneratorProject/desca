@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<Methodology>;
 export class MethodologyService {
 
     private resourceUrl =  SERVER_API_URL + 'api/methodologies';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/methodologies';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class MethodologyService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<Methodology[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Methodology[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Methodology[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

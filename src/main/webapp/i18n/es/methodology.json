@@ -5,7 +5,8 @@
             "home": {
                 "title": "Methodologies",
                 "createLabel": "Crear nuevo Methodology",
-                "createOrEditLabel": "Crear o editar Methodology"
+                "createOrEditLabel": "Crear o editar Methodology",
+                "search": "Search for Methodology"
             },
             "created": "Un nuevo Methodology ha sido creado con el identificador {{ param }}",
             "updated": "Un Methodology ha sido actualizado con el identificador {{ param }}",

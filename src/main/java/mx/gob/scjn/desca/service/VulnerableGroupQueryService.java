@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.VulnerableGroup;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.VulnerableGroupRepository;
+import mx.gob.scjn.desca.repository.search.VulnerableGroupSearchRepository;
 import mx.gob.scjn.desca.service.dto.VulnerableGroupCriteria;
 
 import mx.gob.scjn.desca.service.dto.VulnerableGroupDTO;
@@ -38,9 +39,12 @@ public class VulnerableGroupQueryService extends QueryService<VulnerableGroup> {
 
     private final VulnerableGroupMapper vulnerableGroupMapper;
 
-    public VulnerableGroupQueryService(VulnerableGroupRepository vulnerableGroupRepository, VulnerableGroupMapper vulnerableGroupMapper) {
+    private final VulnerableGroupSearchRepository vulnerableGroupSearchRepository;
+
+    public VulnerableGroupQueryService(VulnerableGroupRepository vulnerableGroupRepository, VulnerableGroupMapper vulnerableGroupMapper, VulnerableGroupSearchRepository vulnerableGroupSearchRepository) {
         this.vulnerableGroupRepository = vulnerableGroupRepository;
         this.vulnerableGroupMapper = vulnerableGroupMapper;
+        this.vulnerableGroupSearchRepository = vulnerableGroupSearchRepository;
     }
 
     /**

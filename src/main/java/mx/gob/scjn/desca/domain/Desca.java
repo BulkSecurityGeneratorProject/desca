@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "desca")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "desca")
 public class Desca implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.JudicialProcessType;
 import mx.gob.scjn.desca.repository.JudicialProcessTypeRepository;
 import mx.gob.scjn.desca.service.JudicialProcessTypeService;
+import mx.gob.scjn.desca.repository.search.JudicialProcessTypeSearchRepository;
 import mx.gob.scjn.desca.service.dto.JudicialProcessTypeDTO;
 import mx.gob.scjn.desca.service.mapper.JudicialProcessTypeMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class JudicialProcessTypeResourceIntTest {
     private JudicialProcessTypeService judicialProcessTypeService;
 
     @Autowired
+    private JudicialProcessTypeSearchRepository judicialProcessTypeSearchRepository;
+
+    @Autowired
     private JudicialProcessTypeQueryService judicialProcessTypeQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class JudicialProcessTypeResourceIntTest {
 
     @Before
     public void initTest() {
+        judicialProcessTypeSearchRepository.deleteAll();
         judicialProcessType = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class JudicialProcessTypeResourceIntTest {
         JudicialProcessType testJudicialProcessType = judicialProcessTypeList.get(judicialProcessTypeList.size() - 1);
         assertThat(testJudicialProcessType.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testJudicialProcessType.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the JudicialProcessType in Elasticsearch
+        JudicialProcessType judicialProcessTypeEs = judicialProcessTypeSearchRepository.findOne(testJudicialProcessType.getId());
+        assertThat(judicialProcessTypeEs).isEqualToIgnoringGivenFields(testJudicialProcessType);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class JudicialProcessTypeResourceIntTest {
     public void updateJudicialProcessType() throws Exception {
         // Initialize the database
         judicialProcessTypeRepository.saveAndFlush(judicialProcessType);
+        judicialProcessTypeSearchRepository.save(judicialProcessType);
         int databaseSizeBeforeUpdate = judicialProcessTypeRepository.findAll().size();
 
         // Update the judicialProcessType
@@ -350,6 +360,10 @@ public class JudicialProcessTypeResourceIntTest {
         JudicialProcessType testJudicialProcessType = judicialProcessTypeList.get(judicialProcessTypeList.size() - 1);
         assertThat(testJudicialProcessType.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testJudicialProcessType.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the JudicialProcessType in Elasticsearch
+        JudicialProcessType judicialProcessTypeEs = judicialProcessTypeSearchRepository.findOne(testJudicialProcessType.getId());
+        assertThat(judicialProcessTypeEs).isEqualToIgnoringGivenFields(testJudicialProcessType);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class JudicialProcessTypeResourceIntTest {
     public void deleteJudicialProcessType() throws Exception {
         // Initialize the database
         judicialProcessTypeRepository.saveAndFlush(judicialProcessType);
+        judicialProcessTypeSearchRepository.save(judicialProcessType);
         int databaseSizeBeforeDelete = judicialProcessTypeRepository.findAll().size();
 
         // Get the judicialProcessType
@@ -383,9 +398,29 @@ public class JudicialProcessTypeResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean judicialProcessTypeExistsInEs = judicialProcessTypeSearchRepository.exists(judicialProcessType.getId());
+        assertThat(judicialProcessTypeExistsInEs).isFalse();
+
         // Validate the database is empty
         List<JudicialProcessType> judicialProcessTypeList = judicialProcessTypeRepository.findAll();
         assertThat(judicialProcessTypeList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchJudicialProcessType() throws Exception {
+        // Initialize the database
+        judicialProcessTypeRepository.saveAndFlush(judicialProcessType);
+        judicialProcessTypeSearchRepository.save(judicialProcessType);
+
+        // Search the judicialProcessType
+        restJudicialProcessTypeMockMvc.perform(get("/api/_search/judicial-process-types?query=id:" + judicialProcessType.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(judicialProcessType.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

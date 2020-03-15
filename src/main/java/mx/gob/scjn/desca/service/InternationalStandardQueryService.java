@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.InternationalStandard;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.InternationalStandardRepository;
+import mx.gob.scjn.desca.repository.search.InternationalStandardSearchRepository;
 import mx.gob.scjn.desca.service.dto.InternationalStandardCriteria;
 
 import mx.gob.scjn.desca.service.dto.InternationalStandardDTO;
@@ -38,9 +39,12 @@ public class InternationalStandardQueryService extends QueryService<Internationa
 
     private final InternationalStandardMapper internationalStandardMapper;
 
-    public InternationalStandardQueryService(InternationalStandardRepository internationalStandardRepository, InternationalStandardMapper internationalStandardMapper) {
+    private final InternationalStandardSearchRepository internationalStandardSearchRepository;
+
+    public InternationalStandardQueryService(InternationalStandardRepository internationalStandardRepository, InternationalStandardMapper internationalStandardMapper, InternationalStandardSearchRepository internationalStandardSearchRepository) {
         this.internationalStandardRepository = internationalStandardRepository;
         this.internationalStandardMapper = internationalStandardMapper;
+        this.internationalStandardSearchRepository = internationalStandardSearchRepository;
     }
 
     /**

@@ -3,13 +3,26 @@
         <span jhiTranslate="descaApp.descaWay.home.title">Desca Ways</span>
         <button class="btn btn-primary float-right jh-create-entity create-desca-way" [routerLink]="['/', { outlets: { popup: ['desca-way-new'] } }]">
             <span class="fa fa-plus"></span>
-            <span  jhiTranslate="descaApp.descaWay.home.createLabel">
+            <span class="hidden-sm-down"  jhiTranslate="descaApp.descaWay.home.createLabel">
             Create new Desca Way
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
     <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'descaApp.descaWay.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <span class="fa fa-search"></span>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <span class="fa fa-trash-o"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
     <br/>
     <div class="table-responsive" *ngIf="descaWays">

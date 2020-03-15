@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<MemberState>;
 export class MemberStateService {
 
     private resourceUrl =  SERVER_API_URL + 'api/member-states';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/member-states';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class MemberStateService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<MemberState[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<MemberState[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<MemberState[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

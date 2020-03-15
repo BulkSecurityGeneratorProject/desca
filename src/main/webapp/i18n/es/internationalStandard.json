@@ -5,7 +5,8 @@
             "home": {
                 "title": "International Standards",
                 "createLabel": "Crear nuevo International Standard",
-                "createOrEditLabel": "Crear o editar International Standard"
+                "createOrEditLabel": "Crear o editar International Standard",
+                "search": "Search for International Standard"
             },
             "created": "Un nuevo International Standard ha sido creado con el identificador {{ param }}",
             "updated": "Un International Standard ha sido actualizado con el identificador {{ param }}",

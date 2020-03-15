@@ -5,7 +5,8 @@
             "home": {
                 "title": "Member States",
                 "createLabel": "Create a new Member State",
-                "createOrEditLabel": "Create or edit a Member State"
+                "createOrEditLabel": "Create or edit a Member State",
+                "search": "Search for Member State"
             },
             "created": "A new Member State is created with identifier {{ param }}",
             "updated": "A Member State is updated with identifier {{ param }}",

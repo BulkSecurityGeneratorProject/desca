@@ -3,6 +3,7 @@ package mx.gob.scjn.desca.service.impl;
 import mx.gob.scjn.desca.service.MethodologyService;
 import mx.gob.scjn.desca.domain.Methodology;
 import mx.gob.scjn.desca.repository.MethodologyRepository;
+import mx.gob.scjn.desca.repository.search.MethodologySearchRepository;
 import mx.gob.scjn.desca.service.dto.MethodologyDTO;
 import mx.gob.scjn.desca.service.mapper.MethodologyMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Methodology.
@@ -26,9 +29,12 @@ public class MethodologyServiceImpl implements MethodologyService {
 
     private final MethodologyMapper methodologyMapper;
 
-    public MethodologyServiceImpl(MethodologyRepository methodologyRepository, MethodologyMapper methodologyMapper) {
+    private final MethodologySearchRepository methodologySearchRepository;
+
+    public MethodologyServiceImpl(MethodologyRepository methodologyRepository, MethodologyMapper methodologyMapper, MethodologySearchRepository methodologySearchRepository) {
         this.methodologyRepository = methodologyRepository;
         this.methodologyMapper = methodologyMapper;
+        this.methodologySearchRepository = methodologySearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class MethodologyServiceImpl implements MethodologyService {
         log.debug("Request to save Methodology : {}", methodologyDTO);
         Methodology methodology = methodologyMapper.toEntity(methodologyDTO);
         methodology = methodologyRepository.save(methodology);
-        return methodologyMapper.toDto(methodology);
+        MethodologyDTO result = methodologyMapper.toDto(methodology);
+        methodologySearchRepository.save(methodology);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class MethodologyServiceImpl implements MethodologyService {
     public void delete(Long id) {
         log.debug("Request to delete Methodology : {}", id);
         methodologyRepository.delete(id);
+        methodologySearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the methodology corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<MethodologyDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Methodologies for query {}", query);
+        Page<Methodology> result = methodologySearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(methodologyMapper::toDto);
     }
 }

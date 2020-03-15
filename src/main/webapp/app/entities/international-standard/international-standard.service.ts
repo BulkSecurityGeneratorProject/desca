@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<InternationalStandard>;
 export class InternationalStandardService {
 
     private resourceUrl =  SERVER_API_URL + 'api/international-standards';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/international-standards';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class InternationalStandardService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<InternationalStandard[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<InternationalStandard[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<InternationalStandard[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

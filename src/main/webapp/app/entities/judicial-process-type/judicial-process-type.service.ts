@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<JudicialProcessType>;
 export class JudicialProcessTypeService {
 
     private resourceUrl =  SERVER_API_URL + 'api/judicial-process-types';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/judicial-process-types';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class JudicialProcessTypeService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<JudicialProcessType[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<JudicialProcessType[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<JudicialProcessType[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

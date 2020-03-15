@@ -5,7 +5,8 @@
             "home": {
                 "title": "Vulnerable Groups",
                 "createLabel": "Create a new Vulnerable Group",
-                "createOrEditLabel": "Create or edit a Vulnerable Group"
+                "createOrEditLabel": "Create or edit a Vulnerable Group",
+                "search": "Search for Vulnerable Group"
             },
             "created": "A new Vulnerable Group is created with identifier {{ param }}",
             "updated": "A Vulnerable Group is updated with identifier {{ param }}",

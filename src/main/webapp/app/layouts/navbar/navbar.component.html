@@ -30,12 +30,6 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
-                        <a class="dropdown-item" routerLink="member-state" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.memberState">Member State</span>
-                        </a>
-                    </li>
-                    <li>
                         <a class="dropdown-item" routerLink="applicant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.entities.applicant">Applicant</span>
@@ -63,6 +57,12 @@
                         <a class="dropdown-item" routerLink="judicial-process-type" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.entities.judicialProcessType">Judicial Process Type</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="member-state" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span jhiTranslate="global.menu.entities.memberState">Member State</span>
                         </a>
                     </li>
                     <li>

@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.JudicialProcessType;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.JudicialProcessTypeRepository;
+import mx.gob.scjn.desca.repository.search.JudicialProcessTypeSearchRepository;
 import mx.gob.scjn.desca.service.dto.JudicialProcessTypeCriteria;
 
 import mx.gob.scjn.desca.service.dto.JudicialProcessTypeDTO;
@@ -38,9 +39,12 @@ public class JudicialProcessTypeQueryService extends QueryService<JudicialProces
 
     private final JudicialProcessTypeMapper judicialProcessTypeMapper;
 
-    public JudicialProcessTypeQueryService(JudicialProcessTypeRepository judicialProcessTypeRepository, JudicialProcessTypeMapper judicialProcessTypeMapper) {
+    private final JudicialProcessTypeSearchRepository judicialProcessTypeSearchRepository;
+
+    public JudicialProcessTypeQueryService(JudicialProcessTypeRepository judicialProcessTypeRepository, JudicialProcessTypeMapper judicialProcessTypeMapper, JudicialProcessTypeSearchRepository judicialProcessTypeSearchRepository) {
         this.judicialProcessTypeRepository = judicialProcessTypeRepository;
         this.judicialProcessTypeMapper = judicialProcessTypeMapper;
+        this.judicialProcessTypeSearchRepository = judicialProcessTypeSearchRepository;
     }
 
     /**

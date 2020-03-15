@@ -24,6 +24,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Desca.
@@ -130,4 +133,22 @@ public class DescaResource {
         descaService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/descas?query=:query : search for the desca corresponding
+     * to the query.
+     *
+     * @param query the query of the desca search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/descas")
+    @Timed
+    public ResponseEntity<List<DescaDTO>> searchDescas(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Descas for query {}", query);
+        Page<DescaDTO> page = descaService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/descas");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

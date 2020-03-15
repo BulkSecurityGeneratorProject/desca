@@ -6,6 +6,7 @@ import mx.gob.scjn.desca.domain.User;
 import mx.gob.scjn.desca.repository.AuthorityRepository;
 import mx.gob.scjn.desca.repository.UserRepository;
 import mx.gob.scjn.desca.security.AuthoritiesConstants;
+import mx.gob.scjn.desca.repository.search.UserSearchRepository;
 import mx.gob.scjn.desca.service.MailService;
 
 import org.junit.Before;
@@ -40,6 +41,9 @@ public class SocialServiceIntTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserSearchRepository userSearchRepository;
+
 
     @Mock
     private MailService mockMailService;
@@ -60,7 +64,7 @@ public class SocialServiceIntTest {
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
-                passwordEncoder, userRepository, mockMailService);
+                passwordEncoder, userRepository, mockMailService, userSearchRepository);
     }
 
     @Test

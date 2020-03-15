@@ -5,7 +5,8 @@
             "home": {
                 "title": "Judicial Process Types",
                 "createLabel": "Crear nuevo Judicial Process Type",
-                "createOrEditLabel": "Crear o editar Judicial Process Type"
+                "createOrEditLabel": "Crear o editar Judicial Process Type",
+                "search": "Search for Judicial Process Type"
             },
             "created": "Un nuevo Judicial Process Type ha sido creado con el identificador {{ param }}",
             "updated": "Un Judicial Process Type ha sido actualizado con el identificador {{ param }}",

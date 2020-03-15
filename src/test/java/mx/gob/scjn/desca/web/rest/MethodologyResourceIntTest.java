@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.Methodology;
 import mx.gob.scjn.desca.repository.MethodologyRepository;
 import mx.gob.scjn.desca.service.MethodologyService;
+import mx.gob.scjn.desca.repository.search.MethodologySearchRepository;
 import mx.gob.scjn.desca.service.dto.MethodologyDTO;
 import mx.gob.scjn.desca.service.mapper.MethodologyMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class MethodologyResourceIntTest {
     private MethodologyService methodologyService;
 
     @Autowired
+    private MethodologySearchRepository methodologySearchRepository;
+
+    @Autowired
     private MethodologyQueryService methodologyQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class MethodologyResourceIntTest {
 
     @Before
     public void initTest() {
+        methodologySearchRepository.deleteAll();
         methodology = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class MethodologyResourceIntTest {
         Methodology testMethodology = methodologyList.get(methodologyList.size() - 1);
         assertThat(testMethodology.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMethodology.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the Methodology in Elasticsearch
+        Methodology methodologyEs = methodologySearchRepository.findOne(testMethodology.getId());
+        assertThat(methodologyEs).isEqualToIgnoringGivenFields(testMethodology);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class MethodologyResourceIntTest {
     public void updateMethodology() throws Exception {
         // Initialize the database
         methodologyRepository.saveAndFlush(methodology);
+        methodologySearchRepository.save(methodology);
         int databaseSizeBeforeUpdate = methodologyRepository.findAll().size();
 
         // Update the methodology
@@ -350,6 +360,10 @@ public class MethodologyResourceIntTest {
         Methodology testMethodology = methodologyList.get(methodologyList.size() - 1);
         assertThat(testMethodology.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMethodology.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the Methodology in Elasticsearch
+        Methodology methodologyEs = methodologySearchRepository.findOne(testMethodology.getId());
+        assertThat(methodologyEs).isEqualToIgnoringGivenFields(testMethodology);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class MethodologyResourceIntTest {
     public void deleteMethodology() throws Exception {
         // Initialize the database
         methodologyRepository.saveAndFlush(methodology);
+        methodologySearchRepository.save(methodology);
         int databaseSizeBeforeDelete = methodologyRepository.findAll().size();
 
         // Get the methodology
@@ -383,9 +398,29 @@ public class MethodologyResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean methodologyExistsInEs = methodologySearchRepository.exists(methodology.getId());
+        assertThat(methodologyExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Methodology> methodologyList = methodologyRepository.findAll();
         assertThat(methodologyList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchMethodology() throws Exception {
+        // Initialize the database
+        methodologyRepository.saveAndFlush(methodology);
+        methodologySearchRepository.save(methodology);
+
+        // Search the methodology
+        restMethodologyMockMvc.perform(get("/api/_search/methodologies?query=id:" + methodology.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(methodology.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

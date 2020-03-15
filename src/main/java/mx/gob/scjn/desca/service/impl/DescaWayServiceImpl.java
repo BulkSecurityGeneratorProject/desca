@@ -3,6 +3,7 @@ package mx.gob.scjn.desca.service.impl;
 import mx.gob.scjn.desca.service.DescaWayService;
 import mx.gob.scjn.desca.domain.DescaWay;
 import mx.gob.scjn.desca.repository.DescaWayRepository;
+import mx.gob.scjn.desca.repository.search.DescaWaySearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaWayDTO;
 import mx.gob.scjn.desca.service.mapper.DescaWayMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing DescaWay.
@@ -26,9 +29,12 @@ public class DescaWayServiceImpl implements DescaWayService {
 
     private final DescaWayMapper descaWayMapper;
 
-    public DescaWayServiceImpl(DescaWayRepository descaWayRepository, DescaWayMapper descaWayMapper) {
+    private final DescaWaySearchRepository descaWaySearchRepository;
+
+    public DescaWayServiceImpl(DescaWayRepository descaWayRepository, DescaWayMapper descaWayMapper, DescaWaySearchRepository descaWaySearchRepository) {
         this.descaWayRepository = descaWayRepository;
         this.descaWayMapper = descaWayMapper;
+        this.descaWaySearchRepository = descaWaySearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class DescaWayServiceImpl implements DescaWayService {
         log.debug("Request to save DescaWay : {}", descaWayDTO);
         DescaWay descaWay = descaWayMapper.toEntity(descaWayDTO);
         descaWay = descaWayRepository.save(descaWay);
-        return descaWayMapper.toDto(descaWay);
+        DescaWayDTO result = descaWayMapper.toDto(descaWay);
+        descaWaySearchRepository.save(descaWay);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class DescaWayServiceImpl implements DescaWayService {
     public void delete(Long id) {
         log.debug("Request to delete DescaWay : {}", id);
         descaWayRepository.delete(id);
+        descaWaySearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the descaWay corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DescaWayDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of DescaWays for query {}", query);
+        Page<DescaWay> result = descaWaySearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(descaWayMapper::toDto);
     }
 }

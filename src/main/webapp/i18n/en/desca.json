@@ -5,7 +5,8 @@
             "home": {
                 "title": "Descas",
                 "createLabel": "Create a new Desca",
-                "createOrEditLabel": "Create or edit a Desca"
+                "createOrEditLabel": "Create or edit a Desca",
+                "search": "Search for Desca"
             },
             "created": "A new Desca is created with identifier {{ param }}",
             "updated": "A Desca is updated with identifier {{ param }}",

@@ -3,6 +3,7 @@ package mx.gob.scjn.desca.service.impl;
 import mx.gob.scjn.desca.service.DescaService;
 import mx.gob.scjn.desca.domain.Desca;
 import mx.gob.scjn.desca.repository.DescaRepository;
+import mx.gob.scjn.desca.repository.search.DescaSearchRepository;
 import mx.gob.scjn.desca.service.dto.DescaDTO;
 import mx.gob.scjn.desca.service.mapper.DescaMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Desca.
@@ -26,9 +29,12 @@ public class DescaServiceImpl implements DescaService {
 
     private final DescaMapper descaMapper;
 
-    public DescaServiceImpl(DescaRepository descaRepository, DescaMapper descaMapper) {
+    private final DescaSearchRepository descaSearchRepository;
+
+    public DescaServiceImpl(DescaRepository descaRepository, DescaMapper descaMapper, DescaSearchRepository descaSearchRepository) {
         this.descaRepository = descaRepository;
         this.descaMapper = descaMapper;
+        this.descaSearchRepository = descaSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class DescaServiceImpl implements DescaService {
         log.debug("Request to save Desca : {}", descaDTO);
         Desca desca = descaMapper.toEntity(descaDTO);
         desca = descaRepository.save(desca);
-        return descaMapper.toDto(desca);
+        DescaDTO result = descaMapper.toDto(desca);
+        descaSearchRepository.save(desca);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class DescaServiceImpl implements DescaService {
     public void delete(Long id) {
         log.debug("Request to delete Desca : {}", id);
         descaRepository.delete(id);
+        descaSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the desca corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DescaDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Descas for query {}", query);
+        Page<Desca> result = descaSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(descaMapper::toDto);
     }
 }

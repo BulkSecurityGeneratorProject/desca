@@ -45,12 +45,12 @@ public class CacheConfiguration {
             cm.createCache(mx.gob.scjn.desca.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
-            cm.createCache(mx.gob.scjn.desca.domain.MemberState.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.Applicant.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.Desca.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.DescaWay.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.InternationalStandard.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.JudicialProcessType.class.getName(), jcacheConfiguration);
+            cm.createCache(mx.gob.scjn.desca.domain.MemberState.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.Methodology.class.getName(), jcacheConfiguration);
             cm.createCache(mx.gob.scjn.desca.domain.VulnerableGroup.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry

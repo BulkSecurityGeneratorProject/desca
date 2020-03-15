@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.Applicant;
 import mx.gob.scjn.desca.repository.ApplicantRepository;
 import mx.gob.scjn.desca.service.ApplicantService;
+import mx.gob.scjn.desca.repository.search.ApplicantSearchRepository;
 import mx.gob.scjn.desca.service.dto.ApplicantDTO;
 import mx.gob.scjn.desca.service.mapper.ApplicantMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class ApplicantResourceIntTest {
     private ApplicantService applicantService;
 
     @Autowired
+    private ApplicantSearchRepository applicantSearchRepository;
+
+    @Autowired
     private ApplicantQueryService applicantQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class ApplicantResourceIntTest {
 
     @Before
     public void initTest() {
+        applicantSearchRepository.deleteAll();
         applicant = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class ApplicantResourceIntTest {
         Applicant testApplicant = applicantList.get(applicantList.size() - 1);
         assertThat(testApplicant.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplicant.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the Applicant in Elasticsearch
+        Applicant applicantEs = applicantSearchRepository.findOne(testApplicant.getId());
+        assertThat(applicantEs).isEqualToIgnoringGivenFields(testApplicant);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class ApplicantResourceIntTest {
     public void updateApplicant() throws Exception {
         // Initialize the database
         applicantRepository.saveAndFlush(applicant);
+        applicantSearchRepository.save(applicant);
         int databaseSizeBeforeUpdate = applicantRepository.findAll().size();
 
         // Update the applicant
@@ -350,6 +360,10 @@ public class ApplicantResourceIntTest {
         Applicant testApplicant = applicantList.get(applicantList.size() - 1);
         assertThat(testApplicant.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicant.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the Applicant in Elasticsearch
+        Applicant applicantEs = applicantSearchRepository.findOne(testApplicant.getId());
+        assertThat(applicantEs).isEqualToIgnoringGivenFields(testApplicant);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class ApplicantResourceIntTest {
     public void deleteApplicant() throws Exception {
         // Initialize the database
         applicantRepository.saveAndFlush(applicant);
+        applicantSearchRepository.save(applicant);
         int databaseSizeBeforeDelete = applicantRepository.findAll().size();
 
         // Get the applicant
@@ -383,9 +398,29 @@ public class ApplicantResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean applicantExistsInEs = applicantSearchRepository.exists(applicant.getId());
+        assertThat(applicantExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Applicant> applicantList = applicantRepository.findAll();
         assertThat(applicantList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchApplicant() throws Exception {
+        // Initialize the database
+        applicantRepository.saveAndFlush(applicant);
+        applicantSearchRepository.save(applicant);
+
+        // Search the applicant
+        restApplicantMockMvc.perform(get("/api/_search/applicants?query=id:" + applicant.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(applicant.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

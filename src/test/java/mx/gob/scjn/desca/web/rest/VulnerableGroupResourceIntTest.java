@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.VulnerableGroup;
 import mx.gob.scjn.desca.repository.VulnerableGroupRepository;
 import mx.gob.scjn.desca.service.VulnerableGroupService;
+import mx.gob.scjn.desca.repository.search.VulnerableGroupSearchRepository;
 import mx.gob.scjn.desca.service.dto.VulnerableGroupDTO;
 import mx.gob.scjn.desca.service.mapper.VulnerableGroupMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class VulnerableGroupResourceIntTest {
     private VulnerableGroupService vulnerableGroupService;
 
     @Autowired
+    private VulnerableGroupSearchRepository vulnerableGroupSearchRepository;
+
+    @Autowired
     private VulnerableGroupQueryService vulnerableGroupQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class VulnerableGroupResourceIntTest {
 
     @Before
     public void initTest() {
+        vulnerableGroupSearchRepository.deleteAll();
         vulnerableGroup = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class VulnerableGroupResourceIntTest {
         VulnerableGroup testVulnerableGroup = vulnerableGroupList.get(vulnerableGroupList.size() - 1);
         assertThat(testVulnerableGroup.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testVulnerableGroup.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the VulnerableGroup in Elasticsearch
+        VulnerableGroup vulnerableGroupEs = vulnerableGroupSearchRepository.findOne(testVulnerableGroup.getId());
+        assertThat(vulnerableGroupEs).isEqualToIgnoringGivenFields(testVulnerableGroup);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class VulnerableGroupResourceIntTest {
     public void updateVulnerableGroup() throws Exception {
         // Initialize the database
         vulnerableGroupRepository.saveAndFlush(vulnerableGroup);
+        vulnerableGroupSearchRepository.save(vulnerableGroup);
         int databaseSizeBeforeUpdate = vulnerableGroupRepository.findAll().size();
 
         // Update the vulnerableGroup
@@ -350,6 +360,10 @@ public class VulnerableGroupResourceIntTest {
         VulnerableGroup testVulnerableGroup = vulnerableGroupList.get(vulnerableGroupList.size() - 1);
         assertThat(testVulnerableGroup.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testVulnerableGroup.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the VulnerableGroup in Elasticsearch
+        VulnerableGroup vulnerableGroupEs = vulnerableGroupSearchRepository.findOne(testVulnerableGroup.getId());
+        assertThat(vulnerableGroupEs).isEqualToIgnoringGivenFields(testVulnerableGroup);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class VulnerableGroupResourceIntTest {
     public void deleteVulnerableGroup() throws Exception {
         // Initialize the database
         vulnerableGroupRepository.saveAndFlush(vulnerableGroup);
+        vulnerableGroupSearchRepository.save(vulnerableGroup);
         int databaseSizeBeforeDelete = vulnerableGroupRepository.findAll().size();
 
         // Get the vulnerableGroup
@@ -383,9 +398,29 @@ public class VulnerableGroupResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean vulnerableGroupExistsInEs = vulnerableGroupSearchRepository.exists(vulnerableGroup.getId());
+        assertThat(vulnerableGroupExistsInEs).isFalse();
+
         // Validate the database is empty
         List<VulnerableGroup> vulnerableGroupList = vulnerableGroupRepository.findAll();
         assertThat(vulnerableGroupList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchVulnerableGroup() throws Exception {
+        // Initialize the database
+        vulnerableGroupRepository.saveAndFlush(vulnerableGroup);
+        vulnerableGroupSearchRepository.save(vulnerableGroup);
+
+        // Search the vulnerableGroup
+        restVulnerableGroupMockMvc.perform(get("/api/_search/vulnerable-groups?query=id:" + vulnerableGroup.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(vulnerableGroup.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

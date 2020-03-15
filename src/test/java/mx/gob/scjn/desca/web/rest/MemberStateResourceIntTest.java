@@ -5,6 +5,7 @@ import mx.gob.scjn.desca.DescaApp;
 import mx.gob.scjn.desca.domain.MemberState;
 import mx.gob.scjn.desca.repository.MemberStateRepository;
 import mx.gob.scjn.desca.service.MemberStateService;
+import mx.gob.scjn.desca.repository.search.MemberStateSearchRepository;
 import mx.gob.scjn.desca.service.dto.MemberStateDTO;
 import mx.gob.scjn.desca.service.mapper.MemberStateMapper;
 import mx.gob.scjn.desca.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class MemberStateResourceIntTest {
     private MemberStateService memberStateService;
 
     @Autowired
+    private MemberStateSearchRepository memberStateSearchRepository;
+
+    @Autowired
     private MemberStateQueryService memberStateQueryService;
 
     @Autowired
@@ -103,6 +107,7 @@ public class MemberStateResourceIntTest {
 
     @Before
     public void initTest() {
+        memberStateSearchRepository.deleteAll();
         memberState = createEntity(em);
     }
 
@@ -124,6 +129,10 @@ public class MemberStateResourceIntTest {
         MemberState testMemberState = memberStateList.get(memberStateList.size() - 1);
         assertThat(testMemberState.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMemberState.isStatus()).isEqualTo(DEFAULT_STATUS);
+
+        // Validate the MemberState in Elasticsearch
+        MemberState memberStateEs = memberStateSearchRepository.findOne(testMemberState.getId());
+        assertThat(memberStateEs).isEqualToIgnoringGivenFields(testMemberState);
     }
 
     @Test
@@ -328,6 +337,7 @@ public class MemberStateResourceIntTest {
     public void updateMemberState() throws Exception {
         // Initialize the database
         memberStateRepository.saveAndFlush(memberState);
+        memberStateSearchRepository.save(memberState);
         int databaseSizeBeforeUpdate = memberStateRepository.findAll().size();
 
         // Update the memberState
@@ -350,6 +360,10 @@ public class MemberStateResourceIntTest {
         MemberState testMemberState = memberStateList.get(memberStateList.size() - 1);
         assertThat(testMemberState.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMemberState.isStatus()).isEqualTo(UPDATED_STATUS);
+
+        // Validate the MemberState in Elasticsearch
+        MemberState memberStateEs = memberStateSearchRepository.findOne(testMemberState.getId());
+        assertThat(memberStateEs).isEqualToIgnoringGivenFields(testMemberState);
     }
 
     @Test
@@ -376,6 +390,7 @@ public class MemberStateResourceIntTest {
     public void deleteMemberState() throws Exception {
         // Initialize the database
         memberStateRepository.saveAndFlush(memberState);
+        memberStateSearchRepository.save(memberState);
         int databaseSizeBeforeDelete = memberStateRepository.findAll().size();
 
         // Get the memberState
@@ -383,9 +398,29 @@ public class MemberStateResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean memberStateExistsInEs = memberStateSearchRepository.exists(memberState.getId());
+        assertThat(memberStateExistsInEs).isFalse();
+
         // Validate the database is empty
         List<MemberState> memberStateList = memberStateRepository.findAll();
         assertThat(memberStateList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchMemberState() throws Exception {
+        // Initialize the database
+        memberStateRepository.saveAndFlush(memberState);
+        memberStateSearchRepository.save(memberState);
+
+        // Search the memberState
+        restMemberStateMockMvc.perform(get("/api/_search/member-states?query=id:" + memberState.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(memberState.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
 
     @Test

@@ -16,6 +16,7 @@ import io.github.jhipster.service.QueryService;
 import mx.gob.scjn.desca.domain.MemberState;
 import mx.gob.scjn.desca.domain.*; // for static metamodels
 import mx.gob.scjn.desca.repository.MemberStateRepository;
+import mx.gob.scjn.desca.repository.search.MemberStateSearchRepository;
 import mx.gob.scjn.desca.service.dto.MemberStateCriteria;
 
 import mx.gob.scjn.desca.service.dto.MemberStateDTO;
@@ -38,9 +39,12 @@ public class MemberStateQueryService extends QueryService<MemberState> {
 
     private final MemberStateMapper memberStateMapper;
 
-    public MemberStateQueryService(MemberStateRepository memberStateRepository, MemberStateMapper memberStateMapper) {
+    private final MemberStateSearchRepository memberStateSearchRepository;
+
+    public MemberStateQueryService(MemberStateRepository memberStateRepository, MemberStateMapper memberStateMapper, MemberStateSearchRepository memberStateSearchRepository) {
         this.memberStateRepository = memberStateRepository;
         this.memberStateMapper = memberStateMapper;
+        this.memberStateSearchRepository = memberStateSearchRepository;
     }
 
     /**

@@ -12,6 +12,7 @@ export type EntityResponseType = HttpResponse<Desca>;
 export class DescaService {
 
     private resourceUrl =  SERVER_API_URL + 'api/descas';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/descas';
 
     constructor(private http: HttpClient) { }
 
@@ -40,6 +41,12 @@ export class DescaService {
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+    }
+
+    search(req?: any): Observable<HttpResponse<Desca[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Desca[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Desca[]>) => this.convertArrayResponse(res));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {

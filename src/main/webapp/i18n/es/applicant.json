@@ -5,7 +5,8 @@
             "home": {
                 "title": "Applicants",
                 "createLabel": "Crear nuevo Applicant",
-                "createOrEditLabel": "Crear o editar Applicant"
+                "createOrEditLabel": "Crear o editar Applicant",
+                "search": "Search for Applicant"
             },
             "created": "Un nuevo Applicant ha sido creado con el identificador {{ param }}",
             "updated": "Un Applicant ha sido actualizado con el identificador {{ param }}",
